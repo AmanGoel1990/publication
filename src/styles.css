@@ -1,1 +1,47 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&display=swap');
+
+:root {
+  --bg: #f4efe8;
+  --panel: #fffaf3;
+  --panel-strong: #ead8c8;
+  --primary: #b64f3a;
+  --primary-dark: #4a1f1a;
+  --secondary: #d3a35d;
+  --text: #242321;
+  --muted: #6d6660;
+  --border: rgba(56, 39, 32, 0.15);
+  --shadow: 0 24px 60px rgba(56, 39, 32, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #f4efe8 0%, #f6e7dc 100%);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
