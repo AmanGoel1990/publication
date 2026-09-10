@@ -1,0 +1,23 @@
+<section class="auth-panel" aria-label="Login form">
+  <div class="auth-card">
+    <h2>Login to continue</h2>
+    <p>Please sign in to add this book to your cart.</p>
+
+    <form class="auth-form" (ngSubmit)="submitLogin()">
+      <label>
+        <span>Email</span>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" required />
+      </label>
+
+      <label>
+        <span>Password</span>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="Enter password" required />
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" class="primary-btn">Login</button>
+        <button type="button" class="secondary-btn" (click)="cancelLogin()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</section>

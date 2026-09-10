@@ -1,0 +1,105 @@
+<div class="page-shell">
+  <!-- @if (showSignin) {
+    <app-signin></app-signin>
+  } @else { -->
+
+    <main class="content-wrap">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Morarji Desai National Institute of Yoga</span>
+          <h1>Ancient wisdom, modern access.</h1>
+          <p>
+            Browse curated publications in Ayurveda, Panchakarma, pharmacology,
+            clinical research, and traditional medicinal sciences.
+          </p>
+
+          <div class="cta-row">
+            <a class="primary-btn" href="#featured-books">Explore Books</a>
+            <a class="secondary-btn" href="#contact">Contact Us</a>
+          </div>
+
+          <ul class="hero-meta" aria-label="Key site metrics">
+            <li><strong>40+</strong><span>titles</span></li>
+            <li><strong>100%</strong><span>research-driven</span></li>
+            <li><strong>Free</strong><span>shipping in India</span></li>
+          </ul>
+        </div>
+
+        <div class="hero-visual" aria-label="Featured publications preview">
+          <div class="book-card card-main">
+            <img
+              src="https://publication.ccras.res.in/wp-content/uploads/2025/06/Marmacikitsa-Basic-Tenets-in-Ayurveda-and-Therapeutic-Approaches-Second-Edition.jpg"
+              alt="Marmacikitsa book cover"
+            />
+          </div>
+          <div class="book-card card-back">
+            <img
+              src="https://publication.ccras.res.in/wp-content/uploads/2025/06/A-Practical-Handbook-of-Panchakarma-Procedures-E.jpeg"
+              alt="Panchakarma handbook"
+            />
+          </div>
+          <div class="badge-pill">Top Selling</div>
+        </div>
+      </section>
+
+      <section id="featured-books" class="featured-section">
+        <div class="section-heading">
+          <p class="eyebrow dark">Top-Selling Books from Our Publications</p>
+          <h2>Trusted titles for students, clinicians, and researchers.</h2>
+        </div>
+
+        <div class="book-grid">
+          @for (book of featuredBooks; track book.title) {
+            <article class="book-item">
+              <div class="book-cover" [style.border-color]="book.accent">
+                <img [src]="book.image" [alt]="book.title" />
+              </div>
+              <div class="book-info">
+                <span class="book-tag" [style.background]="book.accent">Popular</span>
+                <h3>{{ book.title }}</h3>
+                <p>{{ book.description }}</p>
+                <div class="price-row">
+                  <strong>{{ book.price }}</strong>
+                  <button type="button" (click)="addToCart(book)">Add to cart</button>
+                   <!-- <button type="button">Add to cart</button> -->
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+
+      <section class="benefits-strip" aria-label="Why trust us">
+        <article>
+          <span>Free Shipping</span>
+          <h3>No shipping charges—anywhere in India.</h3>
+        </article>
+        <article>
+          <span>No Return or Refund Policy</span>
+          <h3>All sales are final.</h3>
+        </article>
+        <article>
+          <span>Secure Payment</span>
+          <h3>Encrypted payment gateways for safe transactions.</h3>
+        </article>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="footer-copy">
+        <h3>Contact</h3>
+        <p>
+          MDNIY<br />
+          68, Ashoka Rd, near Gol Dak Khana Roundabout, Pandit Pant Marg Area, Sansad Marg Area, New Delhi, Delhi 110001
+        </p>
+        <p>Telephone: 011 2372 1472</p>
+        <p>Email: dir-mdniy@nic.in</p>
+      </div>
+
+      <div class="footer-cta">
+        <h3>Apply for 30% Discount</h3>
+        <a href="#">How to Redeem and Apply the 30% Discount on Book Purchases</a>
+      </div>
+    </footer>
+  <!-- } -->
+</div>

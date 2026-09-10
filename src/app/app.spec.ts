@@ -14,10 +14,19 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should show login before checkout when user is not logged in', async () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
+    fixture.detectChanges();
+
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, publication');
+    const addButton = Array.from(compiled.querySelectorAll('button')).find(
+      (button) => button.textContent?.includes('Add to cart')
+    ) as HTMLButtonElement | undefined;
+
+    addButton?.click();
+    fixture.detectChanges();
+
+    expect(compiled.textContent).toContain('Login to continue');
+    expect(compiled.textContent).toContain('Email');
   });
 });

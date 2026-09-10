@@ -1,0 +1,24 @@
+<header class="topbar">
+      <div class="brand" aria-label="MDNIY publications brand">
+        <a class="logo-link" href="/" aria-label="MDNIY home">
+          <img class="logo" src="logo.jpeg" alt="Morarji Desai National Institute of Yoga logo" />
+        </a>
+        <div class="brand-copy">
+          <strong>MDNIY</strong>
+          <span>Publications</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Main menu">
+        @for (item of navItems; track item) {
+          <a href="#">{{ item }}</a>
+        }
+      </nav>
+
+      <div class="topbar-actions">
+        <button type="button" class="cart-pill" aria-label="Shopping cart">
+          <!-- Cart ({{ cartCount }}) -->
+        </button>
+        <a class="primary-btn" href="#featured-books">Order Now</a>
+      </div>
+    </header>
