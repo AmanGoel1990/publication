@@ -23,6 +23,7 @@ html {
 
 body {
   margin: 0;
+  padding-top: 110px;
   background: linear-gradient(180deg, #f4efe8 0%, #f6e7dc 100%);
   color: var(--text);
   font-family: 'Inter', sans-serif;
