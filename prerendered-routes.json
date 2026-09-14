@@ -1,0 +1,6 @@
+{
+  "routes": {
+    "/publication": {},
+    "/publication/signin": {}
+  }
+}
