@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CartService } from '../cart.service';
 
-// type CartItem = {
-//   title: string;
-//   price: string;
-//   quantity: number;
-// };
 @Component({
   selector: 'app-menu',
   imports: [],
@@ -13,6 +10,37 @@ import { Component } from '@angular/core';
 })
 export class Menu {
   readonly navItems = ['Home', 'Publications', 'Special Offers', 'About MDNIY', 'Contact'];
+  isCartOpen = false;
+  isMenuOpen = true;
+
+  constructor(
+    public cartService: CartService,
+    private router: Router,
+  ) {}
+
+  get cartCount(): number {
+    return this.cartService.cartCount;
+  }
+
+  get cartItems() {
+    return this.cartService.items;
+  }
+
+  get cartTotal(): string {
+    return `₹${this.cartService.cartTotal.toLocaleString('en-IN')}`;
+  }
+
+  toggleCart(): void {
+    this.isCartOpen = !this.isCartOpen;
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  proceedToPay(): void {
+    this.router.navigate(['/signin']);
+  }
 }
 //   isLoggedIn = false;
 //   showSignin = false;

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { CartService } from '../cart.service';
+
 type Book = {
   title: string;
   price: string;
@@ -14,7 +16,7 @@ type Book = {
   styleUrl: './home.css',
 })
 export class Home {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cartService: CartService) {}
   readonly featuredBooks: Book[] = [
     {
       title: 'Marmacikitsa',
@@ -82,18 +84,8 @@ export class Home {
       accent: '#4d6a53'
     }
   ];
-  addToCart(product: any) {
-    console.log('Product added to cart');
-  // this.http.post('http://localhost:8080/api/cart', {
-  //   productId: product.id,
-  //   quantity: 1
-  // }).subscribe({
-  //   next: () => {
-  //     console.log('Product added to cart');
-  //   },
-  //   error: (error) => {
-  //     console.error('Failed to add product', error);
-  //   }
-  // });
-}
+  addToCart(product: { title: string; price: string }): void {
+    this.cartService.addToCart(product);
+  }
+
 }
