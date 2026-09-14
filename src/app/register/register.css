@@ -12,7 +12,7 @@
 }
 
 .auth-card {
-  width: min(100%, 460px);
+  width: min(100%, 500px);
   padding: 32px 28px;
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.9);
@@ -69,7 +69,7 @@
 
 .link-btn {
   width: fit-content;
-  margin: 0 auto;
+  margin: 12px auto 0;
   border: none;
   background: transparent;
   color: #0d5b45;
@@ -78,8 +78,7 @@
   padding: 0;
 }
 
-.primary-btn,
-.secondary-btn {
+.primary-btn {
   flex: 1;
   appearance: none;
   border: none;
@@ -87,16 +86,8 @@
   padding: 0.9rem 1rem;
   font-weight: 700;
   cursor: pointer;
-}
-
-.primary-btn {
   background: linear-gradient(135deg, #0d5b45 0%, #0d774d 52%, #e9bb4a 100%);
   color: white;
-}
-
-.secondary-btn {
-  background: #eef2ee;
-  color: #1a372f;
 }
 
 @media (max-width: 480px) {
@@ -107,9 +98,5 @@
   .auth-card {
     padding: 22px 18px;
     border-radius: 18px;
-  }
-
-  .form-actions {
-    flex-direction: column;
   }
 }

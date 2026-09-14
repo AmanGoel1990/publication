@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -15,6 +16,8 @@ export class Signin {
   email = '';
   password = '';
 
+  constructor(private router: Router) {}
+
   submitLogin(): void {
     if (!this.email.trim() || !this.password.trim()) {
       return;
@@ -23,7 +26,11 @@ export class Signin {
     this.loginSuccess.emit();
   }
 
+  goToRegister(): void {
+    this.router.navigate(['/register']);
+  }
+
   cancelLogin(): void {
-    this.cancel.emit();
+    this.router.navigate(['/register']);
   }
 }
