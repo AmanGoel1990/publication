@@ -75,6 +75,7 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.85);
+  transition: all 0.25s ease;
 }
 
 .menu-toggle {
@@ -294,28 +295,34 @@
   }
 
   .menu-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    order: 2;
-    padding: 0.7rem 1.1rem;
-    border: 1px solid rgba(245, 215, 123, 0.6);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #f7f3ea;
-    font-weight: 700;
-    cursor: pointer;
+    display: none;
   }
 
   .main-nav {
-    display: none;
+    display: flex;
     width: 100%;
     order: 3;
     padding-top: 8px;
+    opacity: 1;
+    max-height: none;
+    overflow: visible;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 16px;
   }
 
   .main-nav.open {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 16px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(11, 29, 23, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    opacity: 1;
+    max-height: none;
   }
 
   .topbar-actions {

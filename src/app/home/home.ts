@@ -19,24 +19,24 @@ export class Home {
   constructor(private http: HttpClient, private cartService: CartService) {}
   readonly featuredBooks: Book[] = [
     {
-      title: 'Marmacikitsa',
+      title: 'Yoga For Adolescents',
       price: '₹1,200',
-      image: 'https://publication.ccras.res.in/wp-content/uploads/2025/06/Marmacikitsa-Basic-Tenets-in-Ayurveda-and-Therapeutic-Approaches-Second-Edition.jpg',
-      description: 'Basic tenets in Ayurveda and therapeutic approaches for clinical practice.',
+      image: 'https://www.yogamdniy.nic.in/uploads/YogaAdolescents.jpg',
+      description: 'Yoga For Adolescents',
       accent: '#b64f3a'
     },
     {
-      title: 'Panchakarma Procedures',
+      title: 'Yoga for Geriatric Population',
       price: '₹540',
-      image: 'https://publication.ccras.res.in/wp-content/uploads/2025/06/A-Practical-Handbook-of-Panchakarma-Procedures-E.jpeg',
-      description: 'A practical handbook covering common Panchakarma procedures and safety guidelines.',
+      image: 'https://www.yogamdniy.nic.in/uploads/YogaforGeriatricPopulation.jpg',
+      description: 'Yoga for Geriatric Population',
       accent: '#8b6d3b'
     },
     {
-      title: 'Guidelines on Panchakarma',
+      title: 'Yoga For Children',
       price: '₹100',
-      image: 'https://publication.ccras.res.in/wp-content/uploads/2025/06/Guidelines-on-Basic-Training-and-Safety-in-Panchakarma.jpeg',
-      description: 'Foundational training and safety measures for effective preparation and practice.',
+      image: 'https://www.yogamdniy.nic.in/uploads/YogaChildren.jpg',
+      description: 'Yoga For Children',
       accent: '#2f4858'
     }
   ];

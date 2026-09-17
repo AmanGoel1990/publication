@@ -17,6 +17,13 @@ export class Signin {
   password = '';
 
   constructor(private router: Router) {}
+  // constructor(private integration: IntegrationService) {}
+
+  // userForm: FormGroup = new FormGroup({
+  //   email: new FormControl('', [Validators.required, Validators.email]),
+  //   password: new FormControl('', [Validators.required]),
+  // });
+
 
   submitLogin(): void {
     if (!this.email.trim() || !this.password.trim()) {
