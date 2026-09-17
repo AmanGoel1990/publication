@@ -1,0 +1,19 @@
+<section id="publication-list" class="publication-menu" aria-label="Publication books catalog">
+      <div class="publication-header">
+        <p class="eyebrow">Publications</p>
+        <h2>Books available in our collection</h2>
+      </div>
+
+      <div class="publication-grid">
+        @for (book of publicationBooks; track book.title) {
+          <article class="publication-card">
+            <img [src]="book.image" [alt]="book.title" />
+            <div class="publication-info">
+              <span class="book-tag" [style.background]="book.accent">{{ book.price }}</span>
+              <h3>{{ book.title }}</h3>
+              <p>{{ book.description }}</p>
+            </div>
+          </article>
+        }
+      </div>
+    </section>

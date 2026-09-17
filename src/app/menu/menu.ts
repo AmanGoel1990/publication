@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-menu',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
@@ -36,6 +36,17 @@ export class Menu {
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  navigateToItem(item: string): void {
+    if (item === 'Home') {
+      this.router.navigate(['/']);
+      return;
+    }
+
+    if (item === 'Publications') {
+      this.router.navigate(['/publication']);
+    }
   }
 
   proceedToPay(): void {

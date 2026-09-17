@@ -15,7 +15,10 @@
 
       <nav class="main-nav" [class.open]="isMenuOpen" aria-label="Main menu">
         @for (item of navItems; track item) {
-          <a href="#">{{ item }}</a>
+          <a
+            href="#"
+            (click)="$event.preventDefault(); navigateToItem(item)"
+            >{{ item }}</a>
         }
       </nav>
 
