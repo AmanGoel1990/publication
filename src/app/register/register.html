@@ -1,36 +1,63 @@
 <section class="auth-panel" aria-label="Register form">
-  <div class="auth-card">
-    <h2>Create account</h2>
-    <p>Register to place orders and manage your cart.</p>
+  @if (!isRegistered) {
+    <div class="auth-card">
+      <h2>Create account</h2>
+      <p>Register to place orders and manage your cart.</p>
 
-    <form class="auth-form" (ngSubmit)="submitRegister()">
-      <label>
-        <span>Full name</span>
-        <input type="text" [(ngModel)]="fullName" name="fullName" placeholder="Your full name" required />
-      </label>
+      <form class="auth-form" (ngSubmit)="submitRegister()">
+        <label>
+          <span>Full name</span>
+          <input type="text" [(ngModel)]="fullName" name="fullName" placeholder="Your full name" required />
+        </label>
 
-      <label>
-        <span>Email</span>
-        <input type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" required />
-      </label>
+        <label>
+          <span>Username</span>
+          <input type="text" [(ngModel)]="username" name="username" placeholder="Choose a username" required />
+        </label>
 
-      <label>
-        <span>Phone</span>
-        <input type="tel" [(ngModel)]="phone" name="phone" placeholder="Your phone number" required />
-      </label>
+        <label>
+          <span>Email</span>
+          <input type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" required />
+        </label>
 
-      <label>
-        <span>Password</span>
-        <input type="password" [(ngModel)]="password" name="password" placeholder="Create a password" required />
-      </label>
+        <label>
+          <span>Phone</span>
+          <input
+            type="tel"
+            [(ngModel)]="phone"
+            name="phone"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            placeholder="Your phone number"
+            (input)="phone = $any($event.target).value.replace(/\D/g, '')"
+            required
+          />
+        </label>
 
-      <div class="form-actions">
-        <button type="submit" class="primary-btn">Register</button>
-      </div>
+        <label>
+          <span>Password</span>
+          <input type="password" [(ngModel)]="password" name="password" placeholder="Create a password" required />
+        </label>
 
-      <button type="button" class="link-btn" (click)="goToLogin()">
-        Already have an account? Login
-      </button>
-    </form>
-  </div>
+        @if (registerError) {
+          <p class="form-error">{{ registerError }}</p>
+        }
+
+        <div class="form-actions">
+          <button type="submit" class="primary-btn">Register</button>
+        </div>
+
+        <button type="button" class="link-btn" (click)="goToLogin()">
+          Already have an account? Login
+        </button>
+      </form>
+    </div>
+  } @else {
+    <div class="auth-card success-card" aria-live="polite">
+      <div class="success-badge">✓</div>
+      <h2>Registration successful</h2>
+      <p>Your account has been created successfully.</p>
+      <button type="button" class="primary-btn" (click)="goToLogin()">Go to Login</button>
+    </div>
+  }
 </section>

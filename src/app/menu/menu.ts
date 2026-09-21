@@ -52,6 +52,10 @@ export class Menu {
   proceedToPay(): void {
     this.router.navigate(['/signin']);
   }
+
+  openLogin(): void {
+    this.router.navigate(['/signin']);
+  }
 }
 //   isLoggedIn = false;
 //   showSignin = false;

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Integration } from '../services/integration';
 
 @Component({
   selector: 'app-signin',
@@ -13,24 +14,40 @@ export class Signin {
   @Output() loginSuccess = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
-  email = '';
+  username = '';
   password = '';
+  loginError = '';
+  isLoggedIn = false;
 
-  constructor(private router: Router) {}
-  // constructor(private integration: IntegrationService) {}
-
-  // userForm: FormGroup = new FormGroup({
-  //   email: new FormControl('', [Validators.required, Validators.email]),
-  //   password: new FormControl('', [Validators.required]),
-  // });
-
+  constructor(
+    private router: Router,
+    private integration: Integration,
+  ) {}
 
   submitLogin(): void {
-    if (!this.email.trim() || !this.password.trim()) {
+    const trimmedUsername = this.username.trim();
+    const trimmedPassword = this.password.trim();
+
+    if (!trimmedUsername || !trimmedPassword) {
+      this.loginError = 'Please enter username and password.';
       return;
     }
 
-    this.loginSuccess.emit();
+    this.loginError = '';
+
+    this.integration.doLogin({ username: trimmedUsername, password: trimmedPassword }).subscribe({
+      next: () => {
+        this.isLoggedIn = true;
+        this.loginSuccess.emit();
+      },
+      error: () => {
+        this.loginError = 'Invalid username or password.';
+      },
+    });
+  }
+
+  continueShopping(): void {
+    this.router.navigate(['/']);
   }
 
   goToRegister(): void {

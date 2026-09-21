@@ -26,10 +26,35 @@
   color: #163026;
 }
 
+.success-card {
+  text-align: center;
+}
+
+.success-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d5b45 0%, #0d774d 52%, #e9bb4a 100%);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
 .auth-card p {
   margin: 0 0 24px;
   color: #5b6b62;
   line-height: 1.6;
+}
+
+.form-error {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .auth-form {
