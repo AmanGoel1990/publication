@@ -100,13 +100,15 @@
   justify-content: space-between;
   gap: 20px;
   width: min(1280px, calc(100% - 32px));
-  margin: 18px auto 0;
+  /* margin: 18px auto 0; */
   padding: 16px 22px;
-  background: linear-gradient(135deg, #0d5b45 0%, #0d774d 52%, #e9bb4a 100%);
+  /* background: linear-gradient(135deg, #0d5b45 0%, #0d774d 52%, #e9bb4a 100%); */
+  background: linear-gradient(270deg, rgb(216 109 1) 0%, rgb(207 15 100) 100%);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;
   box-shadow: 0 18px 40px rgba(13, 52, 43, 0.22);
+  width: 1910px;
 }
 
 .brand {
