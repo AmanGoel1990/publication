@@ -39,6 +39,7 @@ export class Signin {
       next: () => {
         this.isLoggedIn = true;
         this.loginSuccess.emit();
+        this.router.navigate(['/dashboard']);
       },
       error: () => {
         this.loginError = 'Invalid username or password.';
@@ -47,7 +48,7 @@ export class Signin {
   }
 
   continueShopping(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/dashboard']);
   }
 
   goToRegister(): void {

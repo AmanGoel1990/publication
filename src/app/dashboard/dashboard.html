@@ -1,0 +1,78 @@
+<section class="dashboard-page">
+  <div class="dashboard-header">
+    <div>
+      <p class="eyebrow">Dashboard</p>
+      <h2>Book Management Panel</h2>
+    </div>
+    <span class="total-books">{{ books.length }} Books</span>
+  </div>
+
+  <div class="dashboard-layout">
+    <aside class="book-form-panel">
+      <h3>{{ editingIndex !== null ? 'Edit Book' : 'Add New Book' }}</h3>
+
+      <form class="book-form" (ngSubmit)="submitBook()">
+        <label>
+          <span>Book title</span>
+          <input type="text" [(ngModel)]="form.title" name="title" placeholder="Enter title" />
+        </label>
+
+        <label>
+          <span>Price</span>
+          <input type="text" [(ngModel)]="form.price" name="price" placeholder="₹500" />
+        </label>
+
+        <label>
+          <span>Image URL</span>
+          <input type="text" [(ngModel)]="form.image" name="image" placeholder="https://example.com/book.jpg" />
+        </label>
+
+        <label>
+          <span>Book type</span>
+          <select [(ngModel)]="form.type" name="type">
+            <option value="new">New</option>
+            <option value="old">Old</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Accent color</span>
+          <input type="color" [(ngModel)]="form.accent" name="accent" />
+        </label>
+
+        <label>
+          <span>Description</span>
+          <textarea [(ngModel)]="form.description" name="description" rows="4" placeholder="Book description"></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="primary-btn">
+            {{ editingIndex !== null ? 'Update Book' : 'Add Book' }}
+          </button>
+          <button type="button" class="secondary-btn" (click)="resetForm()">Clear</button>
+        </div>
+      </form>
+    </aside>
+
+    <div class="book-list-panel">
+      <div class="book-grid">
+        @for (book of books; track $index) {
+          <article class="book-card">
+            <img [src]="book.image" [alt]="book.title" />
+            <div class="book-content">
+              <span class="book-badge" [style.background]="book.accent">{{ book.price }}</span>
+              <span class="book-type-tag">{{ book.type === 'new' ? 'New' : 'Old' }}</span>
+              <h4>{{ book.title }}</h4>
+              <p>{{ book.description }}</p>
+            </div>
+
+            <div class="card-actions">
+              <button type="button" class="primary-btn" (click)="editBook($index)">Edit</button>
+              <button type="button" class="danger-btn" (click)="deleteBook($index)">Delete</button>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  </div>
+</section>
