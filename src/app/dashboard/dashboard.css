@@ -93,6 +93,38 @@
   padding: 6px;
 }
 
+.book-form input[type='file'] {
+  padding: 9px;
+}
+
+.upload-status,
+.upload-error {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.upload-status {
+  color: #2a5d31;
+}
+
+.book-pdf-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: #245b72;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.upload-error {
+  color: #b42318;
+}
+
+.book-form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 .book-type-tag {
   display: inline-flex;
   margin-top: 12px;
@@ -162,11 +194,20 @@
   background: linear-gradient(180deg, #fff 0%, #fefaf3 100%);
 }
 
-.book-card img {
+.book-card > img,
+.book-card > app-pdf-cover {
+  position: relative;
   display: block;
   width: 100%;
-  height: 220px;
-  object-fit: cover;
+  aspect-ratio: 0.72;
+  height: auto;
+  max-height: 420px;
+  object-fit: contain;
+  background: #f4efe7;
+}
+
+.book-card > app-pdf-cover {
+  height: auto;
 }
 
 .book-content {

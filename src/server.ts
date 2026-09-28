@@ -5,12 +5,57 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import multer from 'multer';
+import { randomUUID } from 'node:crypto';
+import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
+const bookImagesFolder = join(process.cwd(), 'public', 'books');
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, callback) => {
+      mkdir(bookImagesFolder, { recursive: true }).then(
+        () => callback(null, bookImagesFolder),
+        (error: Error) => callback(error, bookImagesFolder),
+      );
+    },
+    filename: (_req, _file, callback) => {
+      callback(null, `${randomUUID()}.pdf`);
+    },
+  }),
+  limits: { fileSize: 50 * 1024 * 1024, files: 1 },
+  fileFilter: (_req, file, callback) => {
+    if (file.mimetype !== 'application/pdf') {
+      callback(new Error('Upload a PDF file.'));
+      return;
+    }
+
+    callback(null, true);
+  },
+});
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+
+app.post('/uploads/books', (req, res) => {
+  upload.single('book')(req, res, (error) => {
+    if (error) {
+      const status = error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE' ? 413 : 400;
+      res.status(status).json({ message: error.message });
+      return;
+    }
+
+    if (!req.file) {
+      res.status(400).json({ message: 'Choose a PDF to upload.' });
+      return;
+    }
+
+    res.status(201).json({ pdfUrl: `/books/${req.file.filename}` });
+  });
+});
+
+app.use('/books', express.static(bookImagesFolder));
 
 /**
  * Example Express Rest API endpoints can be defined here.

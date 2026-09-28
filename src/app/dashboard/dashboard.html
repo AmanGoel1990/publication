@@ -18,13 +18,33 @@
         </label>
 
         <label>
+          <span>Author</span>
+          <input type="text" [(ngModel)]="form.author" name="author" placeholder="Enter author name" />
+        </label>
+
+        <label>
           <span>Price</span>
           <input type="text" [(ngModel)]="form.price" name="price" placeholder="₹500" />
         </label>
 
+        <!-- <label>
+          <span>Cover image URL</span>
+          <input type="url" [(ngModel)]="form.image" name="image" placeholder="https://example.com/book-cover.jpg" />
+        </label> -->
+
         <label>
-          <span>Image URL</span>
-          <input type="text" [(ngModel)]="form.image" name="image" placeholder="https://example.com/book.jpg" />
+          <span>Upload Book (PDF)</span>
+          <input #bookPdfInput type="file" name="bookPdf" accept="application/pdf,.pdf" (change)="uploadPdf($event)" [disabled]="uploadingPdf" />
+          @if (uploadingPdf) {
+            <span class="upload-status" role="status">Uploading PDF and saving book...</span>
+          } @else if (pendingPdf) {
+            <span class="upload-status" role="status">{{ pendingPdf.name }} ready to upload</span>
+          } @else if (form.pdf) {
+            <span class="upload-status" role="status">PDF saved in public/books</span>
+          }
+          @if (uploadError) {
+            <span class="upload-error" role="alert">{{ uploadError }}</span>
+          }
         </label>
 
         <label>
@@ -35,10 +55,10 @@
           </select>
         </label>
 
-        <label>
+        <!-- <label>
           <span>Accent color</span>
           <input type="color" [(ngModel)]="form.accent" name="accent" />
-        </label>
+        </label> -->
 
         <label>
           <span>Description</span>
@@ -46,7 +66,7 @@
         </label>
 
         <div class="form-actions">
-          <button type="submit" class="primary-btn">
+          <button type="submit" class="primary-btn" [disabled]="uploadingPdf">
             {{ editingIndex !== null ? 'Update Book' : 'Add Book' }}
           </button>
           <button type="button" class="secondary-btn" (click)="resetForm()">Clear</button>
@@ -58,12 +78,19 @@
       <div class="book-grid">
         @for (book of books; track $index) {
           <article class="book-card">
-            <img [src]="book.image" [alt]="book.title" />
+            @if (book.pdf) {
+              <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
+            } @else {
+              <img [src]="book.image" [alt]="book.title" />
+            }
             <div class="book-content">
               <span class="book-badge" [style.background]="book.accent">{{ book.price }}</span>
               <span class="book-type-tag">{{ book.type === 'new' ? 'New' : 'Old' }}</span>
               <h4>{{ book.title }}</h4>
               <p>{{ book.description }}</p>
+              @if (book.pdf) {
+                <a class="book-pdf-link" [href]="book.pdf" target="_blank" rel="noopener">Open PDF</a>
+              }
             </div>
 
             <div class="card-actions">

@@ -51,7 +51,11 @@
           @for (book of featuredBooks; track book.title) {
             <article class="book-item">
               <div class="book-cover" [style.border-color]="book.accent">
-                <img [src]="book.image" [alt]="book.title" />
+                @if (book.pdf) {
+                  <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
+                } @else {
+                  <img [src]="book.image" [alt]="book.title" />
+                }
               </div>
               <div class="book-info">
                 <span class="book-tag" [style.background]="book.accent">Popular</span>

@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Integration } from '../services/integration';
+import { PdfCover } from '../pdf-cover/pdf-cover';
 
 type DashboardBook = {
   id?: number | string;
   title: string;
+  author: string;
   price: string;
   image: string;
+  pdf: string;
   description: string;
   accent: string;
   type: 'new' | 'old';
@@ -16,20 +20,27 @@ type DashboardBook = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PdfCover],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
+  @ViewChild('bookPdfInput') bookPdfInput?: ElementRef<HTMLInputElement>;
+
   books: DashboardBook[] = [];
 
   editingIndex: number | null = null;
   editingId: number | string | null = null;
+  uploadingPdf = false;
+  uploadError = '';
+  pendingPdf: File | null = null;
 
   form: DashboardBook = {
     title: '',
+    author: '',
     price: '',
     image: '',
+    pdf: '',
     description: '',
     accent: '#2f4858',
     type: 'new',
@@ -53,6 +64,38 @@ export class Dashboard implements OnInit {
   }
 
   submitBook(): void {
+    if (this.uploadingPdf) {
+      return;
+    }
+
+    const title = this.form.title.trim();
+    const price = this.form.price.trim();
+    if (!title || !price) {
+      return;
+    }
+
+    this.uploadingPdf = true;
+    this.uploadError = '';
+
+    if (this.pendingPdf) {
+      this.integration.uploadBookPdf(this.pendingPdf).subscribe({
+        next: ({ pdfUrl }) => {
+          this.form.pdf = pdfUrl;
+          this.pendingPdf = null;
+          this.saveBook();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.uploadError = error.error?.message ?? 'Upload failed. Check that the upload server is running.';
+          this.uploadingPdf = false;
+        },
+      });
+      return;
+    }
+
+    this.saveBook();
+  }
+
+  private saveBook(): void {
     const title = this.form.title.trim();
     const price = this.form.price.trim();
     const description = this.form.description.trim();
@@ -64,8 +107,10 @@ export class Dashboard implements OnInit {
     const book: DashboardBook = {
       id: this.editingId ?? undefined,
       title,
+      author: this.form.author.trim(),
       price,
       image: this.form.image.trim() || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
+      pdf: this.form.pdf,
       description: description || 'No description provided yet.',
       accent: this.form.accent || '#2f4858',
       type: this.form.type || 'new',
@@ -74,11 +119,13 @@ export class Dashboard implements OnInit {
     if (this.editingIndex !== null && this.editingId !== null) {
       this.integration.updateBook(this.editingId, book).subscribe({
         next: (updatedBook) => {
+          this.uploadingPdf = false;
           this.books[this.editingIndex as number] = this.mapBook(updatedBook);
           this.resetForm();
         },
-        error: () => {
-          this.resetForm();
+        error: (error: HttpErrorResponse) => {
+          this.uploadError = error.error?.message ?? 'Book could not be saved. Please try again.';
+          this.uploadingPdf = false;
         },
       });
       return;
@@ -86,14 +133,27 @@ export class Dashboard implements OnInit {
 
     this.integration.addBook(book).subscribe({
       next: (createdBook) => {
+        this.uploadingPdf = false;
         this.books.unshift(this.mapBook(createdBook));
         this.resetForm();
       },
-      error: () => {
-        this.books.unshift({ ...book, id: Date.now().toString() });
-        this.resetForm();
+      error: (error: HttpErrorResponse) => {
+        this.uploadError = error.error?.message ?? 'Book could not be saved. Please try again.';
+        this.uploadingPdf = false;
       },
     });
+  }
+
+  uploadPdf(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    this.uploadError = '';
+    this.pendingPdf = file;
   }
 
   editBook(index: number): void {
@@ -129,8 +189,10 @@ export class Dashboard implements OnInit {
   private mapBook(book: {
     id?: number | string;
     title?: string;
+    author?: string;
     price?: string | number;
     image?: string;
+    pdf?: string;
     description?: string;
     accent?: string;
     type?: 'new' | 'old';
@@ -138,8 +200,10 @@ export class Dashboard implements OnInit {
     return {
       id: book.id,
       title: book.title ?? 'Untitled Book',
+      author: book.author ?? '',
       price: String(book.price ?? ''),
       image: book.image || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
+      pdf: book.pdf ?? '',
       description: book.description ?? 'No description provided yet.',
       accent: book.accent ?? '#2f4858',
       type: book.type === 'old' ? 'old' : 'new',
@@ -147,10 +211,18 @@ export class Dashboard implements OnInit {
   }
 
   resetForm(): void {
+    this.uploadError = '';
+    this.pendingPdf = null;
+    this.uploadingPdf = false;
+    if (this.bookPdfInput) {
+      this.bookPdfInput.nativeElement.value = '';
+    }
     this.form = {
       title: '',
+      author: '',
       price: '',
       image: '',
+      pdf: '',
       description: '',
       accent: '#2f4858',
       type: 'new',

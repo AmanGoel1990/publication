@@ -7,12 +7,16 @@ import { Observable, map } from 'rxjs';
 const LOGIN_API_URL = 'http://localhost:8080/api/login';
 const REGISTER_API_URL = 'http://localhost:8080/api/register';
 const BOOKS_API_URL = 'http://localhost:8080/api/books';
+const BOOK_IMAGE_UPLOAD_URL = '/uploads/books';
 
 type ApiBook = {
   id?: number | string;
   title?: string;
+  author?: string;
   price?: string | number;
   image?: string;
+  pdf?: string;
+  pdfFileName?: string;
   description?: string;
   type?: 'new' | 'old';
   accent?: string;
@@ -65,13 +69,20 @@ export class Integration {
   }
 
   addBook(book: ApiBook): Observable<ApiBook> {
-    return this.http.post<ApiBook>(BOOKS_API_URL, this.normalizeBookPayload(book)).pipe(
+    return this.http.post<ApiBook>(BOOKS_API_URL, this.toApiBookPayload(book)).pipe(
       map((response) => this.normalizeBook(response)),
     );
   }
 
+  uploadBookPdf(file: File): Observable<{ pdfUrl: string }> {
+    const body = new FormData();
+    body.append('book', file);
+
+    return this.http.post<{ pdfUrl: string }>(BOOK_IMAGE_UPLOAD_URL, body);
+  }
+
   updateBook(id: number | string, book: ApiBook): Observable<ApiBook> {
-    return this.http.put<ApiBook>(`${BOOKS_API_URL}/${id}`, this.normalizeBookPayload(book)).pipe(
+    return this.http.put<ApiBook>(`${BOOKS_API_URL}/${id}`, this.toApiBookPayload(book)).pipe(
       map((response) => this.normalizeBook(response)),
     );
   }
@@ -98,6 +109,7 @@ export class Integration {
         title: '',
         price: '',
         image: '',
+        pdf: '',
         description: '',
         type: 'new',
         accent: '#2f4858',
@@ -107,24 +119,37 @@ export class Integration {
     return {
       id: book.id,
       title: book.title ?? 'Untitled Book',
+      author: book.author ?? '',
       price: book.price ?? '',
       image:
         book.image || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
+      pdf: book.pdf ?? (book.pdfFileName ? `/books/${book.pdfFileName}` : ''),
+      pdfFileName: book.pdfFileName ?? this.getPdfFileName(book.pdf),
       description: book.description ?? 'No description provided yet.',
       type: book.type ?? 'new',
       accent: book.accent ?? '#2f4858',
     };
   }
 
-  private normalizeBookPayload(book: Partial<ApiBook>): ApiBook {
+  private toApiBookPayload(book: Partial<ApiBook>): {
+    title: string;
+    author: string;
+    description: string;
+    type: 'new' | 'old';
+    price: number;
+    pdfFileName: string;
+  } {
     return {
-      id: book.id,
       title: book.title ?? '',
-      price: book.price ?? '',
-      image: book.image ?? '',
+      author: book.author ?? '',
       description: book.description ?? '',
       type: book.type ?? 'new',
-      accent: book.accent ?? '#2f4858',
+      price: Number(book.price ?? 0),
+      pdfFileName: book.pdfFileName ?? this.getPdfFileName(book.pdf),
     };
+  }
+
+  private getPdfFileName(pdf?: string): string {
+    return pdf?.split('/').pop() ?? '';
   }
 }
