@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 export type CartItem = {
   title: string;
   price: string;
+  format: 'Hardcopy' | 'E-book';
   quantity: number;
 };
 
@@ -12,8 +13,11 @@ export type CartItem = {
 export class CartService {
   items: CartItem[] = [];
 
-  addToCart(item: { title: string; price: string }): void {
-    const existingItem = this.items.find((cartItem) => cartItem.title === item.title);
+  addToCart(item: { title: string; price: string; format?: 'Hardcopy' | 'E-book' }): void {
+    const format = item.format ?? 'Hardcopy';
+    const existingItem = this.items.find(
+      (cartItem) => cartItem.title === item.title && cartItem.format === format,
+    );
 
     if (existingItem) {
       existingItem.quantity += 1;
@@ -23,6 +27,7 @@ export class CartService {
     this.items.push({
       title: item.title,
       price: item.price,
+      format,
       quantity: 1,
     });
   }

@@ -47,6 +47,9 @@ export class Menu {
     if (item === 'Publications') {
       this.router.navigate(['/publication']);
     }
+    if (item === 'Contact') {
+      this.router.navigate(['/contact']);
+    }
   }
 
   proceedToPay(): void {

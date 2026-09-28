@@ -23,8 +23,12 @@
         </label>
 
         <label>
-          <span>Price</span>
-          <input type="text" [(ngModel)]="form.price" name="price" placeholder="₹500" />
+          <span>Hard Copy Price</span>
+          <input type="number" min="0" step="0.01" [(ngModel)]="form.hardcopyprice" name="hardcopyprice" placeholder="500" required />
+        </label>
+        <label>
+          <span>Ebook Price</span>
+          <input type="number" min="0" step="0.01" [(ngModel)]="form.ebookprice" name="ebookprice" placeholder="250" required />
         </label>
 
         <!-- <label>
@@ -84,7 +88,8 @@
               <img [src]="book.image" [alt]="book.title" />
             }
             <div class="book-content">
-              <span class="book-badge" [style.background]="book.accent">{{ book.price }}</span>
+              <span class="book-badge" [style.background]="book.accent">Hardcopy ₹{{ book.hardcopyprice }}</span>
+              <span class="book-badge ebook-price" [style.background]="book.accent">E-book ₹{{ book.ebookprice }}</span>
               <span class="book-type-tag">{{ book.type === 'new' ? 'New' : 'Old' }}</span>
               <h4>{{ book.title }}</h4>
               <p>{{ book.description }}</p>

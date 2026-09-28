@@ -142,7 +142,7 @@ button:hover {
 
 .hero {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1fr;
   gap: 32px;
   align-items: center;
   padding: 18px 0 12px;
@@ -207,61 +207,6 @@ button:hover {
 .hero-meta strong {
   font-size: 1.8rem;
   color: var(--text);
-}
-
-.hero-visual {
-  position: relative;
-  min-height: 520px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.book-card {
-  position: absolute;
-  border-radius: 26px;
-  overflow: hidden;
-  background: rgba(255,255,255,0.65);
-  border: 1px solid rgba(56, 39, 32, 0.1);
-  box-shadow: var(--shadow);
-}
-
-.book-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card-main {
-  width: min(72%, 410px);
-  height: 430px;
-  right: 38px;
-  top: 54px;
-  transform: rotate(12deg);
-}
-
-.card-back {
-  width: min(60%, 330px);
-  height: 360px;
-  left: 10px;
-  bottom: 30px;
-  transform: rotate(-12deg);
-}
-
-.badge-pill {
-  position: absolute;
-  left: 30px;
-  top: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.72rem 1.2rem;
-  border-radius: 999px;
-  background: rgba(74, 31, 26, 0.96);
-  color: white;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .featured-section,
@@ -378,6 +323,46 @@ button:hover {
   margin-top: auto;
 }
 
+.format-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.format-option {
+  display: inline-flex;
+  min-width: 0;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+}
+
+.hardcopy-option {
+  background: var(--primary);
+  color: white;
+}
+
+.ebook-option {
+  background: white;
+  color: var(--primary-dark);
+}
+
+.ebook-option:disabled {
+  border-color: var(--border);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
 .price-row strong,
 .arrival-meta strong {
   font-size: 1.15rem;
@@ -478,6 +463,13 @@ button {
   color: rgba(255,255,255,0.9);
 }
 
+.directions-link {
+  display: inline-block;
+  margin-top: 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .site-footer h3 {
   margin: 0 0 12px;
   font-size: 1.3rem;
@@ -520,6 +512,7 @@ button {
   .site-footer {
     grid-template-columns: 1fr;
   }
+
 }
 
 @media (max-width: 640px) {
@@ -564,23 +557,6 @@ button {
     padding: 20px 16px;
   }
 
-  .hero-visual {
-    min-height: 350px;
-  }
-
-  .card-main {
-    width: 248px;
-    height: 300px;
-    right: 10px;
-    top: 26px;
-  }
-
-  .card-back {
-    width: 196px;
-    height: 240px;
-    left: 0;
-    bottom: 20px;
-  }
 }
 .logo-link {
   display: inline-flex;

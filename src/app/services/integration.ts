@@ -14,6 +14,10 @@ type ApiBook = {
   title?: string;
   author?: string;
   price?: string | number;
+  hardcopyprice?: string | number;
+  ebookprice?: string | number;
+  hardcopyPrice?: string | number;
+  ebookPrice?: string | number;
   image?: string;
   pdf?: string;
   pdfFileName?: string;
@@ -121,6 +125,8 @@ export class Integration {
       title: book.title ?? 'Untitled Book',
       author: book.author ?? '',
       price: book.price ?? '',
+      hardcopyprice: book.hardcopyprice ?? book.hardcopyPrice ?? book.price ?? '',
+      ebookprice: book.ebookprice ?? book.ebookPrice ?? '',
       image:
         book.image || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
       pdf: book.pdf ?? (book.pdfFileName ? `/books/${book.pdfFileName}` : ''),
@@ -137,14 +143,19 @@ export class Integration {
     description: string;
     type: 'new' | 'old';
     price: number;
+    hardcopyprice: number;
+    ebookprice: number;
     pdfFileName: string;
   } {
+    const hardcopyPrice = Number(book.hardcopyprice ?? book.hardcopyPrice ?? book.price ?? 0);
     return {
       title: book.title ?? '',
       author: book.author ?? '',
       description: book.description ?? '',
       type: book.type ?? 'new',
-      price: Number(book.price ?? 0),
+      price: hardcopyPrice,
+      hardcopyprice: hardcopyPrice,
+      ebookprice: Number(book.ebookprice ?? book.ebookPrice ?? 0),
       pdfFileName: book.pdfFileName ?? this.getPdfFileName(book.pdf),
     };
   }

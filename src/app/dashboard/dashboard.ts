@@ -9,7 +9,8 @@ type DashboardBook = {
   id?: number | string;
   title: string;
   author: string;
-  price: string;
+  hardcopyprice: string;
+  ebookprice: string;
   image: string;
   pdf: string;
   description: string;
@@ -38,7 +39,8 @@ export class Dashboard implements OnInit {
   form: DashboardBook = {
     title: '',
     author: '',
-    price: '',
+    hardcopyprice: '',
+    ebookprice: '',
     image: '',
     pdf: '',
     description: '',
@@ -69,8 +71,9 @@ export class Dashboard implements OnInit {
     }
 
     const title = this.form.title.trim();
-    const price = this.form.price.trim();
-    if (!title || !price) {
+    const hardcopyprice = String(this.form.hardcopyprice ?? '').trim();
+    const ebookprice = String(this.form.ebookprice ?? '').trim();
+    if (!title || !hardcopyprice || !ebookprice) {
       return;
     }
 
@@ -97,10 +100,11 @@ export class Dashboard implements OnInit {
 
   private saveBook(): void {
     const title = this.form.title.trim();
-    const price = this.form.price.trim();
+    const hardcopyprice = String(this.form.hardcopyprice ?? '').trim();
+    const ebookprice = String(this.form.ebookprice ?? '').trim();
     const description = this.form.description.trim();
 
-    if (!title || !price) {
+    if (!title || !hardcopyprice || !ebookprice) {
       return;
     }
 
@@ -108,7 +112,8 @@ export class Dashboard implements OnInit {
       id: this.editingId ?? undefined,
       title,
       author: this.form.author.trim(),
-      price,
+      hardcopyprice: hardcopyprice,
+      ebookprice: ebookprice,
       image: this.form.image.trim() || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
       pdf: this.form.pdf,
       description: description || 'No description provided yet.',
@@ -191,6 +196,8 @@ export class Dashboard implements OnInit {
     title?: string;
     author?: string;
     price?: string | number;
+    hardcopyprice?: string | number;
+    ebookprice?: string | number;
     image?: string;
     pdf?: string;
     description?: string;
@@ -201,7 +208,8 @@ export class Dashboard implements OnInit {
       id: book.id,
       title: book.title ?? 'Untitled Book',
       author: book.author ?? '',
-      price: String(book.price ?? ''),
+      hardcopyprice: String(book.hardcopyprice ?? book.price ?? ''),
+      ebookprice: String(book.ebookprice ?? ''),
       image: book.image || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
       pdf: book.pdf ?? '',
       description: book.description ?? 'No description provided yet.',
@@ -220,7 +228,8 @@ export class Dashboard implements OnInit {
     this.form = {
       title: '',
       author: '',
-      price: '',
+      hardcopyprice: '',
+      ebookprice: '',
       image: '',
       pdf: '',
       description: '',

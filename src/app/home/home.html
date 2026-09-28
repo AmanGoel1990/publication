@@ -24,7 +24,7 @@
           </ul>
         </div>
 
-        <div class="hero-visual" aria-label="Featured publications preview">
+        <!-- <div class="hero-visual" aria-label="Featured publications preview">
           <div class="book-card card-main">
             <img
               src="https://www.yogamdniy.nic.in/uploads/YogaforMentalHealth.jpg"
@@ -38,7 +38,7 @@
             />
           </div>
           <div class="badge-pill">Top Selling</div>
-        </div>
+        </div> -->
       </section>
 
       <section id="featured-books" class="featured-section">
@@ -62,9 +62,21 @@
                 <h3>{{ book.title }}</h3>
                 <p>{{ book.description }}</p>
                 <div class="price-row">
-                  <strong>{{ book.price }}</strong>
-                  <button type="button" (click)="addToCart(book)">Add to cart</button>
-                   <!-- <button type="button">Add to cart</button> -->
+                  <strong>Choose a format</strong>
+                </div>
+                <div class="format-options" aria-label="Book formats">
+                  <button type="button" class="format-option hardcopy-option" (click)="addToCart({ title: book.title, price: book.hardcopyPrice, format: 'Hardcopy' })">
+                    Hardcopy · {{ book.hardcopyPrice }} · Add to cart
+                  </button>
+                  @if (book.pdf) {
+                    <button type="button" class="format-option ebook-option" (click)="addToCart({ title: book.title, price: book.ebookPrice, format: 'E-book' })">
+                      E-book · {{ book.ebookPrice }} · Add to cart
+                    </button>
+                  } @else {
+                    <button type="button" class="format-option ebook-option" disabled>
+                      E-book · {{ book.ebookPrice }} · unavailable
+                    </button>
+                  }
                 </div>
               </div>
             </article>
@@ -90,13 +102,11 @@
 
     <footer id="contact" class="site-footer">
       <div class="footer-copy">
-        <h3>Contact</h3>
-        <p>
-          MDNIY<br />
-          68, Ashoka Rd, near Gol Dak Khana Roundabout, Pandit Pant Marg Area, Sansad Marg Area, New Delhi, Delhi 110001
-        </p>
-        <p>Telephone: 011 2372 1472</p>
-        <p>Email: dir-mdniy@nic.in</p>
+        <h3>Contact MDNIY</h3>
+        <p>68, Ashoka Road, near Gol Dak Khana Roundabout, Pandit Pant Marg Area, New Delhi, Delhi 110001</p>
+        <p>Telephone: <a href="tel:+911123721472">011 2372 1472</a></p>
+        <p>Email: <a href="mailto:dir-mdniy@nic.in">dir-mdniy@nic.in</a></p>
+        <a class="directions-link" href="https://www.google.com/maps/search/?api=1&query=Morarji+Desai+National+Institute+of+Yoga%2C+68+Ashoka+Road%2C+New+Delhi+110001" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
       </div>
 
       <div class="footer-cta">

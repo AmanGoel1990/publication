@@ -1,19 +1,51 @@
-<section id="publication-list" class="publication-menu" aria-label="Publication books catalog">
-      <div class="publication-header">
-        <p class="eyebrow">Publications</p>
-        <h2>Books available in our collection</h2>
-      </div>
+<main class="publication-page" id="publication-list">
+  <header class="publication-header">
+    <p class="eyebrow">Publications</p>
+    <h1>Books available in our collection</h1>
+  </header>
 
-      <div class="publication-grid">
-        @for (book of publicationBooks; track book.title) {
-          <article class="publication-card">
-            <img [src]="book.image" [alt]="book.title" />
-            <div class="publication-info">
-              <span class="book-tag" [style.background]="book.accent">{{ book.price }}</span>
-              <h3>{{ book.title }}</h3>
-              <p>{{ book.description }}</p>
-            </div>
-          </article>
+  @if (isLoading()) {
+    <p class="catalog-message" role="status">Loading books...</p>
+  } @else if (hasLoadError()) {
+    <p class="catalog-message" role="alert">Books could not be loaded. Please try again later.</p>
+  } @else {
+    @for (group of bookGroups(); track group.type) {
+      <section class="publication-section" [attr.aria-label]="group.title">
+        <header class="section-heading">
+          <h2>{{ group.title }}</h2>
+          <span>{{ group.books.length }} titles</span>
+        </header>
+
+        @if (group.books.length) {
+          <div class="publication-grid">
+            @for (book of group.books; track book.id ?? book.title) {
+              <article class="publication-card">
+                <div class="publication-cover">
+                  @if (book.pdf) {
+                    <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
+                  } @else {
+                    <img [src]="book.image" [alt]="book.title" />
+                  }
+                </div>
+                <div class="publication-info">
+                  <span class="book-type" [class.old-book]="book.type === 'old'">{{ book.type === 'old' ? 'Old' : 'New' }}</span>
+                  <h3>{{ book.title }}</h3>
+                  @if (book.author) {
+                    <p class="book-author">{{ book.author }}</p>
+                  }
+                  <p>{{ book.description }}</p>
+                  <div class="book-prices">
+                    <span>Hardcopy <strong>{{ book.hardcopyPrice }}</strong></span>
+                    <span>E-book <strong>{{ book.ebookPrice }}</strong></span>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="empty-category">No {{ group.title.toLowerCase() }} found.</p>
         }
-      </div>
-    </section>
+      </section>
+    }
+  }
+</main>

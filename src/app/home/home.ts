@@ -5,7 +5,8 @@ import { PdfCover } from '../pdf-cover/pdf-cover';
 
 type Book = {
   title: string;
-  price: string;
+  hardcopyPrice: string;
+  ebookPrice: string;
   image: string;
   pdf: string;
   description: string;
@@ -30,7 +31,8 @@ export class Home {
       next: (books) => {
         this.featuredBooks = books.map((book) => ({
           title: book.title ?? 'Untitled Book',
-          price: `₹${book.price ?? 0}`,
+          hardcopyPrice: `₹${book.hardcopyprice}`,
+          ebookPrice: `₹${book.ebookprice}`,
           image: book.image ?? 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
           pdf: book.pdf ?? '',
           description: book.description ?? 'No description provided yet.',
@@ -43,7 +45,7 @@ export class Home {
     });
   }
 
-  addToCart(product: { title: string; price: string }): void {
+  addToCart(product: { title: string; price: string; format: 'Hardcopy' | 'E-book' }): void {
     this.cartService.addToCart(product);
   }
 

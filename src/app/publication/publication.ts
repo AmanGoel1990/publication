@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
+import { Integration } from '../services/integration';
+import { PdfCover } from '../pdf-cover/pdf-cover';
 
 type PublicationBook = {
+  id?: number | string;
   title: string;
-  price: string;
+  author: string;
+  type: 'new' | 'old';
+  hardcopyPrice: string;
+  ebookPrice: string;
   image: string;
+  pdf: string;
   description: string;
   accent: string;
 };
@@ -11,53 +18,61 @@ type PublicationBook = {
 @Component({
   selector: 'app-publication',
   standalone: true,
-  imports: [],
+  imports: [PdfCover],
   templateUrl: './publication.html',
   styleUrl: './publication.css',
 })
-export class Publication {
-  readonly publicationBooks: PublicationBook[] = [
-    {
-      title: 'Yoga For Adolescents',
-      price: '₹1,200',
-      image: 'https://www.yogamdniy.nic.in/uploads/YogaAdolescents.jpg',
-      description: 'A practical guide for youth wellness, posture, breathwork, and mindful routines.',
-      accent: '#b64f3a',
-    },
-    {
-      title: 'Yoga for Geriatric Population',
-      price: '₹540',
-      image: 'https://www.yogamdniy.nic.in/uploads/YogaforGeriatricPopulation.jpg',
-      description: 'Gentle movement and breathing practices designed for healthy ageing.',
-      accent: '#8b6d3b',
-    },
-    {
-      title: 'Yoga For Children',
-      price: '₹100',
-      image: 'https://www.yogamdniy.nic.in/uploads/YogaChildren.jpg',
-      description: 'Simple yoga practices to support concentration, flexibility, and confidence.',
-      accent: '#2f4858',
-    },
-    {
-      title: 'BIOSTATISTICS Basics to Advances',
-      price: '₹312',
-      image: 'https://publication.ccras.res.in/wp-content/uploads/2025/06/Biostatistics-Basics-to-Advances.jpeg',
-      description: 'Foundational to advanced statistical methods for clinical and research settings.',
-      accent: '#5a7c33',
-    },
-    {
-      title: 'Evidence-based safety of Ayurvedic Herbo-Mineral Formulations',
-      price: '₹110',
-      image: 'https://publication.ccras.res.in/wp-content/uploads/2025/06/Evidence-based-safety-of-Ayurvedic-Herbo-Mineral-Formulations-E.jpeg',
-      description: 'A clinically informed resource on safe use, evidence, and formulation review.',
-      accent: '#7f4c3a',
-    },
-    {
-      title: 'Clinical Safety and Efficacy of Dhatri Lauha',
-      price: '₹200',
-      image: 'https://publication.ccras.res.in/wp-content/uploads/2025/06/Clinical-Safety-and-Efficacy-of-Dhatri-Lauha-in-Iron-Deficiency-Anaemia-Pandu-Roga-2.jpeg',
-      description: 'A focused study on therapeutic use in iron deficiency anaemia.',
-      accent: '#3d5d77',
-    },
-  ];
+export class Publication implements OnInit {
+  readonly newBooks = signal<PublicationBook[]>([]);
+  readonly oldBooks = signal<PublicationBook[]>([]);
+  readonly isLoading = signal(true);
+  readonly hasLoadError = signal(false);
+  readonly bookGroups = computed(() => [
+    { type: 'new', title: 'New Books', books: this.newBooks() },
+    { type: 'old', title: 'Old Books', books: this.oldBooks() },
+  ]);
+
+  constructor(private integration: Integration) {}
+
+  ngOnInit(): void {
+    this.integration.getBooks().subscribe({
+      next: (books) => {
+        const mappedBooks = books.map((book) => this.mapBook(book));
+        this.newBooks.set(mappedBooks.filter((book) => book.type === 'new'));
+        this.oldBooks.set(mappedBooks.filter((book) => book.type === 'old'));
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.hasLoadError.set(true);
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  private mapBook(book: {
+    id?: number | string;
+    title?: string;
+    author?: string;
+    type?: 'new' | 'old';
+    hardcopyprice?: string | number;
+    ebookprice?: string | number;
+    price?: string | number;
+    image?: string;
+    pdf?: string;
+    description?: string;
+    accent?: string;
+  }): PublicationBook {
+    return {
+      id: book.id,
+      title: book.title ?? 'Untitled Book',
+      author: book.author ?? '',
+      type: book.type === 'old' ? 'old' : 'new',
+      hardcopyPrice: `₹${book.hardcopyprice ?? book.price ?? 0}`,
+      ebookPrice: `₹${book.ebookprice ?? 0}`,
+      image: book.image ?? 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
+      pdf: book.pdf ?? '',
+      description: book.description ?? 'No description provided yet.',
+      accent: book.accent ?? '#2f4858',
+    };
+  }
 }

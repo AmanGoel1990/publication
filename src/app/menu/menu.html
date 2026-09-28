@@ -47,10 +47,11 @@
                 </div>
 
                 <div class="cart-item-list">
-                  @for (item of cartItems; track item.title) {
+                      @for (item of cartItems; track item.title + item.format) {
                     <div class="cart-item-row">
                       <div>
                         <strong>{{ item.title }}</strong>
+                            <span>{{ item.format }}</span>
                         <span>Qty: {{ item.quantity }}</span>
                       </div>
                       <span class="cart-price">{{ item.price }}</span>

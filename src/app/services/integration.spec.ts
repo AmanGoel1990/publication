@@ -67,7 +67,8 @@ describe('Integration', () => {
       author: 'John Smith',
       description: 'Java programming book',
       type: 'new',
-      price: '599.99',
+      hardcopyprice: '599.99',
+      ebookprice: '249.50',
       pdf: '/books/java-programming.pdf',
     }).subscribe();
 
@@ -79,6 +80,8 @@ describe('Integration', () => {
       description: 'Java programming book',
       type: 'new',
       price: 599.99,
+      hardcopyprice: 599.99,
+      ebookprice: 249.5,
       pdfFileName: 'java-programming.pdf',
     });
     req.flush({
@@ -87,6 +90,8 @@ describe('Integration', () => {
       description: 'Java programming book',
       type: 'new',
       price: 599.99,
+      hardcopyprice: 599.99,
+      ebookprice: 249.5,
       pdfFileName: 'java-programming.pdf',
     });
   });
