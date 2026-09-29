@@ -244,6 +244,14 @@ button:hover {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.books-status {
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  text-align: center;
+}
+
 .book-item {
   display: flex;
   flex-direction: column;

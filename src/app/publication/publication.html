@@ -20,7 +20,7 @@
           <div class="publication-grid">
             @for (book of group.books; track book.id ?? book.title) {
               <article class="publication-card">
-                <div class="publication-cover">
+                <div class="publication-cover" [style.border-color]="book.accent">
                   @if (book.pdf) {
                     <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
                   } @else {
@@ -28,15 +28,28 @@
                   }
                 </div>
                 <div class="publication-info">
-                  <span class="book-type" [class.old-book]="book.type === 'old'">{{ book.type === 'old' ? 'Old' : 'New' }}</span>
+                  <span class="book-type" [class.old-book]="book.type === 'old'" [style.background]="book.type === 'old' ? null : book.accent">{{ book.type === 'old' ? 'Old' : 'New' }}</span>
                   <h3>{{ book.title }}</h3>
                   @if (book.author) {
                     <p class="book-author">{{ book.author }}</p>
                   }
                   <p>{{ book.description }}</p>
-                  <div class="book-prices">
-                    <span>Hardcopy <strong>{{ book.hardcopyPrice }}</strong></span>
-                    <span>E-book <strong>{{ book.ebookPrice }}</strong></span>
+                  <div class="price-row">
+                    <strong>Choose a format</strong>
+                  </div>
+                  <div class="format-options" aria-label="Book formats">
+                    <button type="button" class="format-option hardcopy-option" (click)="addToCart({ title: book.title, price: book.hardcopyPrice, format: 'Hardcopy' })">
+                      Hardcopy · {{ book.hardcopyPrice }} · Add to cart
+                    </button>
+                    @if (book.pdf) {
+                      <button type="button" class="format-option ebook-option" (click)="addToCart({ title: book.title, price: book.ebookPrice, format: 'E-book' })">
+                        E-book · {{ book.ebookPrice }} · Add to cart
+                      </button>
+                    } @else {
+                      <button type="button" class="format-option ebook-option" disabled>
+                        E-book · {{ book.ebookPrice }} · unavailable
+                      </button>
+                    }
                   </div>
                 </div>
               </article>

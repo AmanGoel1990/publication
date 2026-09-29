@@ -20,6 +20,8 @@ type Book = {
 })
 export class Home {
   featuredBooks: Book[] = [];
+  isLoading = true;
+  hasLoadError = false;
 
   constructor(
     private integration: Integration,
@@ -38,9 +40,12 @@ export class Home {
           description: book.description ?? 'No description provided yet.',
           accent: book.accent ?? '#2f4858',
         }));
+        this.isLoading = false;
       },
       error: () => {
         this.featuredBooks = [];
+        this.isLoading = false;
+        this.hasLoadError = true;
       },
     });
   }

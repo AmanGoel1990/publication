@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
+import { CartService } from '../cart.service';
 import { Integration } from '../services/integration';
 import { PdfCover } from '../pdf-cover/pdf-cover';
 
@@ -32,7 +33,14 @@ export class Publication implements OnInit {
     { type: 'old', title: 'Old Books', books: this.oldBooks() },
   ]);
 
-  constructor(private integration: Integration) {}
+  constructor(
+    private integration: Integration,
+    private cartService: CartService,
+  ) {}
+
+  addToCart(product: { title: string; price: string; format: 'Hardcopy' | 'E-book' }): void {
+    this.cartService.addToCart(product);
+  }
 
   ngOnInit(): void {
     this.integration.getBooks().subscribe({

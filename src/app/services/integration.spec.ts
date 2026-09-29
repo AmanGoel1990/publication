@@ -45,6 +45,20 @@ describe('Integration', () => {
     req.flush([{ title: 'Java Programming', price: 599.99 }]);
   });
 
+  it('reuses the loaded books response for subsequent requests', () => {
+    let firstResult: unknown;
+    let secondResult: unknown;
+
+    service.getBooks().subscribe((books) => (firstResult = books));
+    const req = httpMock.expectOne('http://localhost:8080/api/books');
+    req.flush([{ title: 'Java Programming', price: 599.99 }]);
+
+    service.getBooks().subscribe((books) => (secondResult = books));
+
+    expect(firstResult).toEqual(secondResult);
+    httpMock.expectNone('http://localhost:8080/api/books');
+  });
+
   it('uploads a book PDF and returns its public path', () => {
     const file = new File(['book contents'], 'book.pdf', { type: 'application/pdf' });
     let result: { pdfUrl: string } | undefined;

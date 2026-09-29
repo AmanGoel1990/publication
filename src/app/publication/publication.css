@@ -49,23 +49,30 @@
 
 .publication-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
-	gap: 20px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 22px;
 }
 
 .publication-card {
-	overflow: hidden;
-	border: 1px solid rgba(56, 39, 32, 0.15);
-	border-radius: 8px;
-	background: #fffaf3;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	padding: 18px;
+	border: 1px solid var(--border);
+	border-radius: 22px;
+	background: rgba(255, 255, 255, 0.82);
 }
 
 .publication-cover {
 	position: relative;
+	display: block;
 	width: 100%;
 	aspect-ratio: 0.72;
+	max-height: 420px;
 	overflow: hidden;
-	background: #f4efe7;
+	border: 3px solid var(--border);
+	border-radius: 18px;
+	background: linear-gradient(180deg, #f4efe7, #f8f3ec);
 }
 
 .publication-cover img,
@@ -79,25 +86,27 @@
 }
 
 .publication-info {
-	display: grid;
-	gap: 10px;
-	padding: 16px;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 12px;
 }
 
 .book-type {
-	justify-self: start;
-	padding: 4px 9px;
-	border-radius: 4px;
-	background: #e7efe8;
-	color: #285b3b;
-	font-size: 0.75rem;
+	align-self: flex-start;
+	padding: 0.42rem 0.7rem;
+	border-radius: 999px;
+	background: #2f4858;
+	color: white;
+	font-size: 0.7rem;
 	font-weight: 700;
+	letter-spacing: 0.06em;
 	text-transform: uppercase;
 }
 
 .book-type.old-book {
-	background: #f5e9dd;
-	color: #854b2e;
+	background: #854b2e;
+	color: white;
 }
 
 .publication-info h3,
@@ -106,27 +115,67 @@
 }
 
 .publication-info h3 {
-	color: #242321;
-	font-size: 1.1rem;
-	line-height: 1.35;
+	color: var(--text);
+	font-size: 1.35rem;
+	line-height: 1.3;
 }
 
 .publication-info p {
-	color: #6d6660;
-	font-size: 0.9rem;
-	line-height: 1.55;
+	color: var(--muted);
+	font-size: 0.95rem;
+	line-height: 1.7;
 }
 
-.book-prices {
+.price-row {
 	display: flex;
-	flex-wrap: wrap;
-	gap: 8px 16px;
-	color: #6d6660;
-	font-size: 0.85rem;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: auto;
 }
 
-.book-prices strong {
-	color: #4a1f1a;
+.price-row strong {
+	color: var(--primary-dark);
+	font-size: 1rem;
+}
+
+.format-options {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px;
+	margin-top: 4px;
+}
+
+.format-option {
+	display: inline-flex;
+	min-width: 0;
+	min-height: 44px;
+	align-items: center;
+	justify-content: center;
+	padding: 0.65rem 0.75rem;
+	border: 1px solid var(--primary);
+	border-radius: 8px;
+	font: inherit;
+	font-size: 0.82rem;
+	font-weight: 700;
+	line-height: 1.25;
+	text-align: center;
+}
+
+.hardcopy-option {
+	background: var(--primary);
+	color: white;
+}
+
+.ebook-option {
+	background: white;
+	color: var(--primary-dark);
+}
+
+.ebook-option:disabled {
+	border-color: var(--border);
+	color: var(--muted);
+	cursor: not-allowed;
 }
 
 .catalog-message,
@@ -141,5 +190,15 @@
 
 	.publication-header h1 {
 		font-size: 2rem;
+	}
+
+	.publication-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 980px) {
+	.publication-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { LoginResponse } from '../models/login-response';
 import { LoginRequest } from '../models/login-request';
-import { Observable, map } from 'rxjs';
+import { Observable, map, shareReplay, tap } from 'rxjs';
 
 const LOGIN_API_URL = 'http://localhost:8080/api/login';
 const REGISTER_API_URL = 'http://localhost:8080/api/register';
@@ -30,6 +30,8 @@ type ApiBook = {
   providedIn: 'root',
 })
 export class Integration {
+  private booksCache$: Observable<ApiBook[]> | null = null;
+
   constructor(private http: HttpClient) {}
 
   doLogin(request: LoginRequest): Observable<LoginResponse> {
@@ -67,14 +69,20 @@ export class Integration {
   }
 
   getBooks(): Observable<ApiBook[]> {
-    return this.http.get<ApiBook[]>(BOOKS_API_URL).pipe(
-      map((response) => this.normalizeBooks(response)),
-    );
+    if (!this.booksCache$) {
+      this.booksCache$ = this.http.get<ApiBook[]>(BOOKS_API_URL).pipe(
+        map((response) => this.normalizeBooks(response)),
+        shareReplay({ bufferSize: 1, refCount: false }),
+      );
+    }
+
+    return this.booksCache$;
   }
 
   addBook(book: ApiBook): Observable<ApiBook> {
     return this.http.post<ApiBook>(BOOKS_API_URL, this.toApiBookPayload(book)).pipe(
       map((response) => this.normalizeBook(response)),
+      tap(() => (this.booksCache$ = null)),
     );
   }
 
@@ -88,11 +96,14 @@ export class Integration {
   updateBook(id: number | string, book: ApiBook): Observable<ApiBook> {
     return this.http.put<ApiBook>(`${BOOKS_API_URL}/${id}`, this.toApiBookPayload(book)).pipe(
       map((response) => this.normalizeBook(response)),
+      tap(() => (this.booksCache$ = null)),
     );
   }
 
   deleteBook(id: number | string): Observable<void> {
-    return this.http.delete<void>(`${BOOKS_API_URL}/${id}`);
+    return this.http.delete<void>(`${BOOKS_API_URL}/${id}`).pipe(
+      tap(() => (this.booksCache$ = null)),
+    );
   }
 
   private normalizeBooks(books: ApiBook[] | { data?: ApiBook[] } | null): ApiBook[] {

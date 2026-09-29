@@ -47,9 +47,16 @@
           <h2>Trusted titles for students, clinicians, and researchers.</h2>
         </div>
 
-        <div class="book-grid">
-          @for (book of featuredBooks; track book.title) {
-            <article class="book-item">
+        @if (isLoading) {
+          <p class="books-status" role="status">Loading publications...</p>
+        } @else if (hasLoadError) {
+          <p class="books-status" role="alert">Publications could not be loaded. Please try again shortly.</p>
+        } @else if (featuredBooks.length === 0) {
+          <p class="books-status">No publications are available yet.</p>
+        } @else {
+          <div class="book-grid">
+            @for (book of featuredBooks; track book.title) {
+              <article class="book-item">
               <div class="book-cover" [style.border-color]="book.accent">
                 @if (book.pdf) {
                   <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
@@ -79,9 +86,10 @@
                   }
                 </div>
               </div>
-            </article>
-          }
-        </div>
+              </article>
+            }
+          </div>
+        }
       </section>
 
       <section class="benefits-strip" aria-label="Why trust us">
