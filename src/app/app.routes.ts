@@ -5,10 +5,12 @@ import { Register } from './register/register';
 import { Publication } from './publication/publication';
 import { Dashboard } from './dashboard/dashboard';
 import { Contact } from './contact/contact';
+import { Cart } from './cart/cart';
 
 export const routes: Routes = [
     { path: '', component: Home },
     { path: 'dashboard', component: Dashboard },
+    { path: 'cart', component: Cart },
     { path: 'publication', component: Publication },
     { path: 'signin', component: Signin },
     { path: 'register', component: Register },

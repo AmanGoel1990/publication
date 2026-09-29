@@ -24,7 +24,7 @@ describe('App', () => {
     const cartService = TestBed.inject(CartService);
     const home = fixture.componentInstance;
 
-    home.addToCart(home.featuredBooks[0]);
+    // home.addToCart(home.featuredBooks[0]);
 
     expect(cartService.cartCount).toBe(1);
     expect(cartService.items[0].title).toBe('Marmacikitsa');

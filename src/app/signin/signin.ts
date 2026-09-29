@@ -18,6 +18,7 @@ export class Signin {
   password = '';
   loginError = '';
   isLoggedIn = false;
+  isUserRole = false;
 
   constructor(
     private router: Router,
@@ -36,10 +37,18 @@ export class Signin {
     this.loginError = '';
 
     this.integration.doLogin({ username: trimmedUsername, password: trimmedPassword }).subscribe({
-      next: () => {
+      next: (response) => {
+        const role = String(
+          (response as { role?: string; userRole?: string; roleName?: string } | undefined)?.role ??
+            (response as { role?: string; userRole?: string; roleName?: string } | undefined)?.userRole ??
+            (response as { role?: string; userRole?: string; roleName?: string } | undefined)?.roleName ??
+            '',
+        ).trim().toLowerCase();
+
+        this.isUserRole = role === 'user' || role === 'customer' || (!role && trimmedUsername.toLowerCase() !== 'admin');
         this.isLoggedIn = true;
         this.loginSuccess.emit();
-        this.router.navigate(['/dashboard']);
+        this.router.navigate([this.isUserRole ? '/cart' : '/dashboard']);
       },
       error: () => {
         this.loginError = 'Invalid username or password.';
@@ -48,7 +57,7 @@ export class Signin {
   }
 
   continueShopping(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate([this.isUserRole ? '/cart' : '/dashboard']);
   }
 
   goToRegister(): void {

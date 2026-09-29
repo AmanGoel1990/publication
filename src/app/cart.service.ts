@@ -32,6 +32,24 @@ export class CartService {
     });
   }
 
+  updateQuantity(title: string, format: 'Hardcopy' | 'E-book', quantity: number): void {
+    const item = this.items.find(
+      (cartItem) => cartItem.title === title && cartItem.format === format,
+    );
+
+    if (!item) {
+      return;
+    }
+
+    item.quantity = Math.max(1, quantity);
+  }
+
+  removeItem(title: string, format: 'Hardcopy' | 'E-book'): void {
+    this.items = this.items.filter(
+      (cartItem) => !(cartItem.title === title && cartItem.format === format),
+    );
+  }
+
   get cartCount(): number {
     return this.items.reduce((total, item) => total + item.quantity, 0);
   }
