@@ -18,6 +18,23 @@ export class Menu {
     private router: Router,
   ) {}
 
+  get isLoggedIn(): boolean {
+    return typeof localStorage !== 'undefined' && !!localStorage.getItem('mdniy-auth-session');
+  }
+
+  get currentUser(): string {
+    if (typeof localStorage === 'undefined') {
+      return 'User';
+    }
+
+    try {
+      const session = localStorage.getItem('mdniy-auth-session');
+      return session ? JSON.parse(session).username ?? 'User' : 'User';
+    } catch {
+      return 'User';
+    }
+  }
+
   get cartCount(): number {
     return this.cartService.cartCount;
   }
@@ -57,7 +74,20 @@ export class Menu {
   }
 
   openLogin(): void {
+    if (this.isLoggedIn) {
+      const currentPage = typeof localStorage !== 'undefined' ? localStorage.getItem('mdniy-last-page') || '/' : '/';
+      this.router.navigateByUrl(currentPage);
+      return;
+    }
+
     this.router.navigate(['/signin']);
+  }
+
+  logout(): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('mdniy-auth-session');
+    }
+    this.router.navigate(['/']);
   }
 }
 //   isLoggedIn = false;

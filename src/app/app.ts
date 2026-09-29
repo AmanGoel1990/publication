@@ -6,6 +6,8 @@ import { Menu } from './menu/menu';
 
 
 
+const LAST_PAGE_KEY = 'mdniy-last-page';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -14,6 +16,13 @@ import { Menu } from './menu/menu';
   styleUrl: './app.css'
 })
 export class App {
+  constructor(private router: Router) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && typeof localStorage !== 'undefined') {
+        localStorage.setItem(LAST_PAGE_KEY, event.urlAfterRedirects || '/');
+      }
+    });
+  }
   // readonly portals = [
   //   { name: 'CCRAS', url: 'https://ccras.nic.in/' },
   //   { name: 'Ayush Research Portal', url: 'https://ayushportal.nic.in/' },
