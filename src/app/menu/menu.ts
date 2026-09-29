@@ -9,7 +9,8 @@ import { CartService } from '../cart.service';
   styleUrl: './menu.css',
 })
 export class Menu {
-  readonly navItems = ['Home', 'Publications', 'Special Offers', 'About MDNIY', 'Contact'];
+  // readonly navItems = ['Home', 'Publications', 'Special Offers', 'About MDNIY', 'Contact'];
+  readonly navItems = ['Home', 'Publications', 'About', 'Contact'];
   isCartOpen = false;
   isMenuOpen = true;
 
@@ -63,6 +64,9 @@ export class Menu {
 
     if (item === 'Publications') {
       this.router.navigate(['/publication']);
+    }
+    if (item === 'About') {
+      this.router.navigate(['/about']);
     }
     if (item === 'Contact') {
       this.router.navigate(['/contact']);
