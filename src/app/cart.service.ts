@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 export type CartItem = {
   title: string;
@@ -11,42 +11,48 @@ export type CartItem = {
   providedIn: 'root',
 })
 export class CartService {
-  items: CartItem[] = [];
+  private readonly itemsState = signal<CartItem[]>([]);
+
+  get items(): CartItem[] {
+    return this.itemsState();
+  }
+
+  set items(items: CartItem[]) {
+    this.itemsState.set(items);
+  }
 
   addToCart(item: { title: string; price: string; format?: 'Hardcopy' | 'E-book' }): void {
     const format = item.format ?? 'Hardcopy';
-    const existingItem = this.items.find(
-      (cartItem) => cartItem.title === item.title && cartItem.format === format,
-    );
+    this.itemsState.update((items) => {
+      const existingItem = items.find(
+        (cartItem) => cartItem.title === item.title && cartItem.format === format,
+      );
 
-    if (existingItem) {
-      existingItem.quantity += 1;
-      return;
-    }
+      if (existingItem) {
+        return items.map((cartItem) =>
+          cartItem === existingItem
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem,
+        );
+      }
 
-    this.items.push({
-      title: item.title,
-      price: item.price,
-      format,
-      quantity: 1,
+      return [...items, { title: item.title, price: item.price, format, quantity: 1 }];
     });
   }
 
   updateQuantity(title: string, format: 'Hardcopy' | 'E-book', quantity: number): void {
-    const item = this.items.find(
-      (cartItem) => cartItem.title === title && cartItem.format === format,
+    this.itemsState.update((items) =>
+      items.map((item) =>
+        item.title === title && item.format === format
+          ? { ...item, quantity: Math.max(1, quantity) }
+          : item,
+      ),
     );
-
-    if (!item) {
-      return;
-    }
-
-    item.quantity = Math.max(1, quantity);
   }
 
   removeItem(title: string, format: 'Hardcopy' | 'E-book'): void {
-    this.items = this.items.filter(
-      (cartItem) => !(cartItem.title === title && cartItem.format === format),
+    this.itemsState.update((items) =>
+      items.filter((cartItem) => !(cartItem.title === title && cartItem.format === format)),
     );
   }
 

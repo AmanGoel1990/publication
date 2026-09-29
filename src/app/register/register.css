@@ -105,6 +105,10 @@
 
 .primary-btn {
   flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   appearance: none;
   border: none;
   border-radius: 999px;
@@ -113,6 +117,26 @@
   cursor: pointer;
   background: linear-gradient(135deg, #0d5b45 0%, #0d774d 52%, #e9bb4a 100%);
   color: white;
+}
+
+.primary-btn:disabled {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+.button-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: register-spin 0.7s linear infinite;
+}
+
+@keyframes register-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 480px) {

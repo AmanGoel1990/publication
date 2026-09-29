@@ -40,7 +40,9 @@
           <span>Upload Book (PDF)</span>
           <input #bookPdfInput type="file" name="bookPdf" accept="application/pdf,.pdf" (change)="uploadPdf($event)" [disabled]="uploadingPdf" />
           @if (uploadingPdf) {
-            <span class="upload-status" role="status">Uploading PDF and saving book...</span>
+            <span class="upload-status" role="status">
+              {{ pendingPdf ? 'Uploading PDF and saving book...' : 'Saving book...' }}
+            </span>
           } @else if (pendingPdf) {
             <span class="upload-status" role="status">{{ pendingPdf.name }} ready to upload</span>
           } @else if (form.pdf) {
@@ -71,9 +73,14 @@
 
         <div class="form-actions">
           <button type="submit" class="primary-btn" [disabled]="uploadingPdf">
-            {{ editingIndex !== null ? 'Update Book' : 'Add Book' }}
+            @if (uploadingPdf) {
+              <span class="button-spinner" aria-hidden="true"></span>
+              Saving...
+            } @else {
+              {{ editingIndex !== null ? 'Update Book' : 'Add Book' }}
+            }
           </button>
-          <button type="button" class="secondary-btn" (click)="resetForm()">Clear</button>
+          <button type="button" class="secondary-btn" (click)="resetForm()" [disabled]="uploadingPdf">Clear</button>
         </div>
       </form>
     </aside>

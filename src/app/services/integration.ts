@@ -59,11 +59,11 @@ export class Integration {
   }): Observable<{ message?: string }> {
     return this.http.post<{ message?: string }>(REGISTER_API_URL, request, { observe: 'response' }).pipe(
       map((response) => {
-        if (response.status !== 200) {
+        if (response.status < 200 || response.status >= 300) {
           throw new Error('Registration failed');
         }
 
-        return response.body ?? { message: 'Registration successful' };
+        return response.body ?? {};
       }),
     );
   }
