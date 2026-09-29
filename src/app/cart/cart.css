@@ -47,7 +47,8 @@
 }
 
 .cart-panel,
-.summary-panel {
+.summary-panel,
+.billing-panel {
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--border);
   border-radius: 24px;
@@ -56,6 +57,71 @@
 
 .cart-panel {
   padding: 18px 18px 12px;
+}
+
+.billing-panel {
+  margin-top: 28px;
+  padding: 24px 20px;
+}
+
+.billing-header {
+  margin-bottom: 18px;
+}
+
+.billing-header h2 {
+  margin: 0 0 6px;
+  color: #1f2a1e;
+  font-size: 1.8rem;
+}
+
+.billing-header p {
+  margin: 0;
+  color: #6d6660;
+}
+
+.billing-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.two-col > label,
+.one-col > label {
+  flex: 1;
+}
+
+.billing-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #3a332f;
+  font-weight: 600;
+}
+
+.billing-form input,
+.billing-form textarea {
+  width: 100%;
+  border: 1px solid rgba(56, 39, 32, 0.14);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  background: #fff;
+  color: #1f2a1e;
+}
+
+.billing-form textarea {
+  resize: vertical;
+}
+
+.billing-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
 }
 
 .cart-table-head,

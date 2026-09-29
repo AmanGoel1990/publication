@@ -75,9 +75,63 @@
             <strong>{{ cartTotal }}</strong>
           </div>
 
-          <button type="button" class="checkout-btn">Proceed to checkout</button>
+          <button type="button" class="checkout-btn" (click)="proceedToCheckout()">Proceed to checkout</button>
         </aside>
       </div>
+
+      @if (showBilling) {
+        <section class="billing-panel" aria-live="polite">
+          <div class="billing-header">
+            <h2>Billing details</h2>
+            <p>Please fill in your shipping information.</p>
+          </div>
+
+          <form class="billing-form" (ngSubmit)="placeOrder()">
+            <div class="form-row two-col">
+              <label>
+                <span>Full name</span>
+                <input type="text" [(ngModel)]="billingForm.fullName" name="fullName" required />
+              </label>
+
+              <label>
+                <span>Email</span>
+                <input type="email" [(ngModel)]="billingForm.email" name="email" required />
+              </label>
+            </div>
+
+            <div class="form-row two-col">
+              <label>
+                <span>Phone number</span>
+                <input type="tel" [(ngModel)]="billingForm.phone" name="phone" required />
+              </label>
+
+              <label>
+                <span>City</span>
+                <input type="text" [(ngModel)]="billingForm.city" name="city" required />
+              </label>
+            </div>
+
+            <div class="form-row">
+              <label>
+                <span>Address</span>
+                <textarea rows="4" [(ngModel)]="billingForm.address" name="address" required></textarea>
+              </label>
+            </div>
+
+            <div class="form-row one-col">
+              <label>
+                <span>Pincode</span>
+                <input type="text" [(ngModel)]="billingForm.pincode" name="pincode" required />
+              </label>
+            </div>
+
+            <div class="billing-actions">
+              <button type="button" class="secondary-btn" (click)="showBilling = false">Back</button>
+              <button type="submit" class="primary-btn">Place order</button>
+            </div>
+          </form>
+        </section>
+      }
     } @else {
       <div class="empty-cart">
         <div class="empty-card">

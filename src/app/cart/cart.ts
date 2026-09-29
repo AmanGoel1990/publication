@@ -1,16 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
 export class Cart {
+  showBilling = false;
+
+  billingForm = {
+    fullName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    pincode: '',
+  };
+
   constructor(
     public cartService: CartService,
     private router: Router,
@@ -59,6 +71,23 @@ export class Cart {
 
   removeItem(title: string, format: 'Hardcopy' | 'E-book'): void {
     this.cartService.removeItem(title, format);
+  }
+
+  proceedToCheckout(): void {
+    this.showBilling = true;
+  }
+
+  placeOrder(): void {
+    const { fullName, email, phone, address, city, pincode } = this.billingForm;
+    const hasRequiredFields = fullName && email && phone && address && city && pincode;
+
+    if (!hasRequiredFields) {
+      return;
+    }
+
+    this.cartService.items = [];
+    this.showBilling = false;
+    this.router.navigate(['/']);
   }
 
   continueShopping(): void {
