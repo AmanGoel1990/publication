@@ -7,7 +7,7 @@
       <form class="auth-form" (ngSubmit)="submitRegister()">
         <label>
           <span>Full name</span>
-          <input type="text" [(ngModel)]="fullName" name="fullName" placeholder="Your full name" required />
+          <input type="text" [(ngModel)]="name" name="name" placeholder="Your full name" required />
         </label>
 
         <label>
@@ -21,15 +21,19 @@
         </label>
 
         <label>
-          <span>Phone</span>
+          <span>Phone Number</span>
+
           <input
-            type="tel"
+            type="text"
             [(ngModel)]="phone"
             name="phone"
             inputmode="numeric"
-            pattern="[0-9]*"
-            placeholder="Your phone number"
-            (input)="phone = $any($event.target).value.replace(/\D/g, '')"
+            autocomplete="tel"
+            maxlength="10"
+            pattern="[0-9]{10}"
+            placeholder="Your 10-digit phone number"
+            (keydown)="allowOnlyNumbers($event)"
+            (input)="filterPhone()"
             required
           />
         </label>

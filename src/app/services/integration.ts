@@ -51,7 +51,7 @@ export class Integration {
   }
 
   doRegister(request: {
-    fullName: string;
+    name: string;
     username: string;
     email: string;
     phone: string;

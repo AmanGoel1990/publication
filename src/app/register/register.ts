@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { Integration } from '../services/integration';
   styleUrl: './register.css',
 })
 export class Register {
-  fullName = '';
+  name = '';
   username = '';
   email = '';
   password = '';
@@ -24,17 +24,48 @@ export class Register {
   constructor(
     private router: Router,
     private integration: Integration,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const allowedKeys = [
+      'Backspace',
+      'Delete',
+      'Tab',
+      'ArrowLeft',
+      'ArrowRight',
+      'Home',
+      'End',
+    ];
+
+    if (allowedKeys.includes(event.key)) {
+      return;
+    }
+
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  filterPhone(): void {
+    this.phone = this.phone
+      .replace(/[^0-9]/g, '')
+      .slice(0, 10);
+  }
+
   submitRegister(): void {
-    const trimmedFullName = this.fullName.trim();
+    const trimmedName = this.name.trim();
     const trimmedUsername = this.username.trim();
     const trimmedEmail = this.email.trim();
-    const trimmedPhone = this.phone.replace(/\D/g, '').trim();
+    const trimmedPhone = this.phone.replace(/[^0-9]/g, '').slice(0, 10);
     const trimmedPassword = this.password.trim();
 
-    if (!trimmedFullName || !trimmedUsername || !trimmedEmail || !trimmedPhone || !trimmedPassword) {
+    if (!trimmedName || !trimmedUsername || !trimmedEmail || !trimmedPhone || !trimmedPassword) {
       this.registerError = 'Please fill in all required fields.';
+      return;
+    }
+    if (trimmedPhone.length !== 10) {
+      this.registerError = 'Phone number must be exactly 10 digits.';
       return;
     }
 
@@ -44,24 +75,22 @@ export class Register {
 
     this.integration
       .doRegister({
-        fullName: trimmedFullName,
+        name: trimmedName,
         username: trimmedUsername,
         email: trimmedEmail,
         phone: trimmedPhone,
         password: trimmedPassword,
       })
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.isSubmitting = false;
-          if (response.message?.trim().toLowerCase() === 'user registered successfully') {
-            this.isRegistered = true;
-          } else {
-            this.registerError = response.message || 'Registration failed. Please try again.';
-          }
+          this.isRegistered = true;
+          this.changeDetectorRef.markForCheck();
         },
         error: (error: unknown) => {
           this.isSubmitting = false;
           this.registerError = this.getRegistrationError(error);
+          this.changeDetectorRef.markForCheck();
         },
       });
   }
