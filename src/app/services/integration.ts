@@ -7,7 +7,7 @@ import { Observable, map, shareReplay, tap } from 'rxjs';
 const LOGIN_API_URL = 'http://localhost:8080/api/login';
 const REGISTER_API_URL = 'http://localhost:8080/api/register';
 const BOOKS_API_URL = 'http://localhost:8080/api/books';
-const BOOK_IMAGE_UPLOAD_URL = '/uploads/books';
+const BOOK_IMAGE_UPLOAD_URL = '/public/books';
 
 type ApiBook = {
   id?: number | string;
@@ -81,7 +81,7 @@ export class Integration {
 
   addBook(book: ApiBook): Observable<ApiBook> {
     return this.http.post<ApiBook>(BOOKS_API_URL, this.toApiBookPayload(book)).pipe(
-      map((response) => this.normalizeBook(response)),
+      map((response) => this.normalizeBook(this.mergeBookResponse(book, response))),
       tap(() => (this.booksCache$ = null)),
     );
   }
@@ -95,7 +95,7 @@ export class Integration {
 
   updateBook(id: number | string, book: ApiBook): Observable<ApiBook> {
     return this.http.put<ApiBook>(`${BOOKS_API_URL}/${id}`, this.toApiBookPayload(book)).pipe(
-      map((response) => this.normalizeBook(response)),
+      map((response) => this.normalizeBook(this.mergeBookResponse(book, response))),
       tap(() => (this.booksCache$ = null)),
     );
   }
@@ -116,6 +116,22 @@ export class Integration {
     }
 
     return (books.data ?? []).map((book) => this.normalizeBook(book));
+  }
+
+  private mergeBookResponse(submittedBook: ApiBook, response: ApiBook | null): ApiBook {
+    const mergedBook = { ...submittedBook };
+    if (!response) {
+      return mergedBook;
+    }
+
+    for (const key of Object.keys(response) as (keyof ApiBook)[]) {
+      const value = response[key];
+      if (value !== undefined && value !== null) {
+        Object.assign(mergedBook, { [key]: value });
+      }
+    }
+
+    return mergedBook;
   }
 
   private normalizeBook(book: Partial<ApiBook> | null | undefined): ApiBook {

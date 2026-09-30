@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
 import { Integration } from '../services/integration';
 import { PdfCover } from '../pdf-cover/pdf-cover';
 
@@ -34,7 +35,9 @@ export class Dashboard implements OnInit {
   editingId: number | string | null = null;
   uploadingPdf = false;
   uploadError = '';
+  saveSuccess = '';
   pendingPdf: File | null = null;
+  pendingDelete: { index: number; title: string } | null = null;
 
   form: DashboardBook = {
     title: '',
@@ -48,7 +51,10 @@ export class Dashboard implements OnInit {
     type: 'new',
   };
 
-  constructor(private integration: Integration) {}
+  constructor(
+    private integration: Integration,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadBooks();
@@ -79,17 +85,20 @@ export class Dashboard implements OnInit {
 
     this.uploadingPdf = true;
     this.uploadError = '';
+    this.saveSuccess = '';
 
     if (this.pendingPdf) {
       this.integration.uploadBookPdf(this.pendingPdf).subscribe({
         next: ({ pdfUrl }) => {
           this.form.pdf = pdfUrl;
           this.pendingPdf = null;
+          this.changeDetectorRef.markForCheck();
           this.saveBook();
         },
         error: (error: HttpErrorResponse) => {
           this.uploadError = error.error?.message ?? 'Upload failed. Check that the upload server is running.';
           this.uploadingPdf = false;
+          this.changeDetectorRef.markForCheck();
         },
       });
       return;
@@ -105,6 +114,7 @@ export class Dashboard implements OnInit {
     const description = this.form.description.trim();
 
     if (!title || !hardcopyprice || !ebookprice) {
+      this.uploadingPdf = false;
       return;
     }
 
@@ -122,29 +132,37 @@ export class Dashboard implements OnInit {
     };
 
     if (this.editingIndex !== null && this.editingId !== null) {
-      this.integration.updateBook(this.editingId, book).subscribe({
-        next: (updatedBook) => {
+      this.integration.updateBook(this.editingId, book).pipe(
+        finalize(() => {
           this.uploadingPdf = false;
+          this.changeDetectorRef.markForCheck();
+        }),
+      ).subscribe({
+        next: (updatedBook) => {
           this.books[this.editingIndex as number] = this.mapBook(updatedBook);
           this.resetForm();
+          this.saveSuccess = 'Book updated successfully.';
         },
         error: (error: HttpErrorResponse) => {
           this.uploadError = error.error?.message ?? 'Book could not be saved. Please try again.';
-          this.uploadingPdf = false;
         },
       });
       return;
     }
 
-    this.integration.addBook(book).subscribe({
-      next: (createdBook) => {
+    this.integration.addBook(book).pipe(
+      finalize(() => {
         this.uploadingPdf = false;
+        this.changeDetectorRef.markForCheck();
+      }),
+    ).subscribe({
+      next: (createdBook) => {
         this.books.unshift(this.mapBook(createdBook));
         this.resetForm();
+        this.saveSuccess = 'Book added successfully.';
       },
       error: (error: HttpErrorResponse) => {
         this.uploadError = error.error?.message ?? 'Book could not be saved. Please try again.';
-        this.uploadingPdf = false;
       },
     });
   }
@@ -170,23 +188,35 @@ export class Dashboard implements OnInit {
 
   deleteBook(index: number): void {
     const selected = this.books[index];
+    this.pendingDelete = { index, title: selected.title };
+  }
+
+  cancelDelete(): void {
+    this.pendingDelete = null;
+  }
+
+  confirmDelete(): void {
+    const pendingDelete = this.pendingDelete;
+    if (!pendingDelete) {
+      return;
+    }
+
+    this.pendingDelete = null;
+    const selected = this.books[pendingDelete.index];
     const id = selected.id;
 
     if (id !== undefined && id !== null) {
       this.integration.deleteBook(id).subscribe({
         next: () => {
-          this.books.splice(index, 1);
-        },
-        error: () => {
-          this.books.splice(index, 1);
+          window.location.reload();
         },
       });
       return;
     }
 
-    this.books.splice(index, 1);
+    this.books.splice(pendingDelete.index, 1);
 
-    if (this.editingIndex === index) {
+    if (this.editingIndex === pendingDelete.index) {
       this.resetForm();
     }
   }

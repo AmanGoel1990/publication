@@ -109,4 +109,29 @@ describe('Integration', () => {
       pdfFileName: 'java-programming.pdf',
     });
   });
+
+  it('keeps submitted title and PDF when the save response omits them', () => {
+    let savedBook: unknown;
+
+    service.addBook({
+      title: 'Java Programming',
+      author: 'John Smith',
+      description: 'Java programming book',
+      type: 'new',
+      hardcopyprice: '599.99',
+      ebookprice: '249.50',
+      pdf: '/books/java-programming.pdf',
+    }).subscribe((book) => {
+      savedBook = book;
+    });
+
+    const req = httpMock.expectOne('http://localhost:8080/api/books');
+    req.flush({ id: 12 });
+
+    expect(savedBook).toMatchObject({
+      id: 12,
+      title: 'Java Programming',
+      pdf: '/books/java-programming.pdf',
+    });
+  });
 });

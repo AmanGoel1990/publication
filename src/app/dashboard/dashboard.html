@@ -71,14 +71,35 @@
           <textarea [(ngModel)]="form.description" name="description" rows="4" placeholder="Book description"></textarea>
         </label>
 
+        @if (saveSuccess) {
+          <div class="save-success" role="status">{{ saveSuccess }}</div>
+        }
+
         <div class="form-actions">
-          <button type="submit" class="primary-btn" [disabled]="uploadingPdf">
+          <!-- <button type="submit" class="primary-btn" [disabled]="uploadingPdf">
             @if (uploadingPdf) {
               <span class="button-spinner" aria-hidden="true"></span>
               Saving...
             } @else {
               {{ editingIndex !== null ? 'Update Book' : 'Add Book' }}
             }
+          </button> -->
+
+          
+          <button
+            type="button"
+            (click)="submitBook()"
+            [disabled]="uploadingPdf"
+            class="save-btn"
+          >
+            <span *ngIf="!uploadingPdf">
+              {{ editingId !== null ? 'Update Book' : 'Save Book' }}
+            </span>
+
+            <span *ngIf="uploadingPdf" class="loader-content">
+              <span class="spinner"></span>
+              Saving...
+            </span>
           </button>
           <button type="button" class="secondary-btn" (click)="resetForm()" [disabled]="uploadingPdf">Clear</button>
         </div>
@@ -114,4 +135,48 @@
       </div>
     </div>
   </div>
+
+  @if (uploadingPdf) {
+    <div class="dashboard-modal-backdrop upload-dialog-backdrop">
+      <section class="dashboard-modal upload-dialog" role="status" aria-live="polite" aria-atomic="true">
+        <span class="dashboard-modal-icon upload-modal-icon" aria-hidden="true">
+          <span class="spinner upload-spinner"></span>
+        </span>
+        <p class="dashboard-modal-eyebrow">Book upload</p>
+        <h3>{{ pendingPdf ? 'Uploading PDF' : 'Saving book' }}</h3>
+        @if (pendingPdf) {
+          <p><strong>{{ pendingPdf.name }}</strong> is uploading before its book details are saved.</p>
+        } @else {
+          <p>The book details are being saved now.</p>
+        }
+        <div class="upload-progress" aria-hidden="true">
+          <span [class.upload-progress-complete]="!pendingPdf"></span>
+        </div>
+      </section>
+    </div>
+  }
+
+  @if (pendingDelete; as confirmation) {
+    <div class="dashboard-modal-backdrop" (click)="cancelDelete()">
+      <section
+        class="dashboard-modal"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+        (click)="$event.stopPropagation()"
+      >
+        <span class="dashboard-modal-icon" aria-hidden="true">!</span>
+        <p class="dashboard-modal-eyebrow">Delete book</p>
+        <h3 id="delete-dialog-title">Are you sure?</h3>
+        <p id="delete-dialog-description">
+          <strong>{{ confirmation.title }}</strong> will be removed from your book list.
+        </p>
+        <div class="dashboard-modal-actions">
+          <button type="button" class="secondary-btn" (click)="cancelDelete()">Cancel</button>
+          <button type="button" class="confirm-delete-btn" (click)="confirmDelete()">Delete book</button>
+        </div>
+      </section>
+    </div>
+  }
 </section>

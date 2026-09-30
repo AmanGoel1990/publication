@@ -120,6 +120,16 @@
   color: #b42318;
 }
 
+.save-success {
+  padding: 11px 12px;
+  border: 1px solid #c9e2d1;
+  border-radius: 8px;
+  background: #eff8f1;
+  color: #22643c;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
 .book-form button:disabled {
   cursor: wait;
   opacity: 0.65;
@@ -256,6 +266,176 @@
 
 .card-actions {
   padding: 0 16px 18px;
+}
+
+.save-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loader-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.dashboard-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(22, 29, 34, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.dashboard-modal {
+  width: min(100%, 420px);
+  padding: 28px;
+  border: 1px solid #eadfda;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(20, 25, 30, 0.24);
+  animation: dashboard-modal-in 160ms ease-out both;
+}
+
+.dashboard-modal-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff0ed;
+  color: #b42318;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.dashboard-modal-eyebrow {
+  margin: 0 0 6px;
+  color: #a43a2f;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.dashboard-modal h3 {
+  margin: 0 0 10px;
+  color: #1e2d3d;
+  font-size: 1.4rem;
+}
+
+.dashboard-modal > p:last-of-type {
+  margin: 0;
+  color: #58616a;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.upload-dialog-backdrop {
+  z-index: 1100;
+  cursor: progress;
+}
+
+.upload-modal-icon {
+  background: #e8f4ef;
+  color: #1f7a66;
+}
+
+.upload-spinner {
+  border-color: rgba(31, 122, 102, 0.2);
+  border-top-color: #1f7a66;
+}
+
+.upload-progress {
+  height: 6px;
+  margin-top: 22px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edf2ef;
+}
+
+.upload-progress span {
+  display: block;
+  width: 36%;
+  height: 100%;
+  border-radius: inherit;
+  background: #1f7a66;
+  animation: upload-progress 1.2s ease-in-out infinite alternate;
+}
+
+.upload-progress .upload-progress-complete {
+  width: 78%;
+  animation: none;
+  transition: width 300ms ease;
+}
+
+@keyframes upload-progress {
+  to {
+    width: 82%;
+  }
+}
+
+.confirm-delete-btn {
+  border: 1px solid #a52e25;
+  border-radius: 8px;
+  padding: 10px 16px;
+  background: #b6382e;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.confirm-delete-btn:hover {
+  transform: translateY(-1px);
+  background: #98291f;
+}
+
+@keyframes dashboard-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-modal {
+    animation: none;
+  }
+
+  .upload-progress span {
+    animation: none;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 840px) {

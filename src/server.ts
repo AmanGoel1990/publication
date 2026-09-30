@@ -38,7 +38,7 @@ const upload = multer({
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-app.post('/uploads/books', (req, res) => {
+app.post('/public/books', (req, res) => {
   upload.single('book')(req, res, (error) => {
     if (error) {
       const status = error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE' ? 413 : 400;

@@ -6,12 +6,12 @@
     "logLevel": "debug"
   },
   "/uploads": {
-    "target": "http://localhost:4000",
+    "target": "http://localhost:4200",
     "secure": false,
     "changeOrigin": true
   },
   "/books": {
-    "target": "http://localhost:4000",
+    "target": "http://localhost:4200",
     "secure": false,
     "changeOrigin": true
   }
