@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartService } from '../cart.service';
 
+type CartFormat = 'Hardcopy' | 'E-book';
+
 @Component({
   selector: 'app-cart',
   standalone: true,
@@ -45,32 +47,79 @@ export class Cart {
     return `₹${(numericPrice * item.quantity).toLocaleString('en-IN')}`;
   }
 
-  updateQuantity(title: string, format: 'Hardcopy' | 'E-book', quantity: number): void {
-    this.cartService.updateQuantity(title, format, quantity);
+  updateQuantity(
+    title: string,
+    format: CartFormat,
+    quantity: number,
+  ): void {
+    let newQuantity = Math.floor(Number(quantity));
+
+    if (!Number.isFinite(newQuantity) || newQuantity < 1) {
+      newQuantity = 1;
+    }
+
+    this.cartService.updateQuantity(
+      title,
+      format,
+      newQuantity,
+    );
   }
 
-  incrementQuantity(title: string, format: 'Hardcopy' | 'E-book'): void {
+  incrementQuantity(
+    title: string,
+    format: CartFormat,
+  ): void {
     const item = this.cartItems.find(
-      (cartItem) => cartItem.title === title && cartItem.format === format,
+      (cartItem) =>
+        cartItem.title === title &&
+        cartItem.format === format,
     );
 
-    if (item) {
-      this.updateQuantity(title, format, item.quantity + 1);
+    if (!item) {
+      return;
     }
+
+    this.updateQuantity(
+      title,
+      format,
+      item.quantity + 1,
+    );
   }
 
-  decrementQuantity(title: string, format: 'Hardcopy' | 'E-book'): void {
+  decrementQuantity(
+    title: string,
+    format: CartFormat,
+  ): void {
     const item = this.cartItems.find(
-      (cartItem) => cartItem.title === title && cartItem.format === format,
+      (cartItem) =>
+        cartItem.title === title &&
+        cartItem.format === format,
     );
 
-    if (item) {
-      this.updateQuantity(title, format, item.quantity - 1);
+    if (!item) {
+      return;
     }
+
+    // Minimum quantity is 1
+    if (item.quantity <= 1) {
+      return;
+    }
+
+    this.updateQuantity(
+      title,
+      format,
+      item.quantity - 1,
+    );
   }
 
-  removeItem(title: string, format: 'Hardcopy' | 'E-book'): void {
-    this.cartService.removeItem(title, format);
+  removeItem(
+    title: string,
+    format: CartFormat,
+  ): void {
+    this.cartService.removeItem(
+      title,
+      format,
+    );
   }
 
   proceedToCheckout(): void {

@@ -57,14 +57,14 @@
           <div class="book-grid">
             <!-- @for (book of featuredBooks; track book.title) { -->
              @for (book of featuredBooks; track book.id) {
-              <!-- <article class="book-item"> -->
-                <article
+              <article class="book-item">
+                <!-- <article
                 class="book-item"
                 tabindex="0"
                 (click)="openBookDetails(book)"
                 (keydown.enter)="openBookDetails(book)"
-              >
-              <div class="book-cover" [style.border-color]="book.accent">
+              > -->
+              <div class="book-cover clickable-cover" [style.border-color]="book.accent" role="button" tabindex="0" (click)="openBookDetails(book)" (keydown.enter)="openBookDetails(book)" (keydown.space)="openBookDetails(book); $event.preventDefault()" >
                 @if (book.pdf) {
                   <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
                 } @else {

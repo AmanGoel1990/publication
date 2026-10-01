@@ -47,7 +47,40 @@ export class Menu {
   get cartTotal(): string {
     return `₹${this.cartService.cartTotal.toLocaleString('en-IN')}`;
   }
+  increaseQuantity(item: any): void {
+    this.cartService.updateQuantity(
+      item.title,
+      item.format,
+      item.quantity + 1
+    );
+  }
 
+  decreaseQuantity(item: any): void {
+    if (item.quantity <= 1) {
+      return;
+    }
+
+    this.cartService.updateQuantity(
+      item.title,
+      item.format,
+      item.quantity - 1
+    );
+  }
+  updateQuantity(item: any, event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    let quantity = Number(input.value);
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      quantity = 1;
+    }
+
+    this.cartService.updateQuantity(
+      item.title,
+      item.format,
+      quantity
+    );
+  }
   toggleCart(): void {
     this.isCartOpen = !this.isCartOpen;
   }

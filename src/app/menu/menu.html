@@ -59,7 +59,32 @@
                       <div>
                         <strong>{{ item.title }}</strong>
                             <span>{{ item.format }}</span>
-                        <span>Qty: {{ item.quantity }}</span>
+                        <!-- <span>Qty: {{ item.quantity }}</span> -->
+                         <div class="quantity-control">
+                          <button
+                            type="button"
+                            aria-label="Decrease quantity"
+                            (click)="decreaseQuantity(item)"
+                          >
+                            −
+                          </button>
+
+                          <input
+                            type="number"
+                            min="1"
+                            [value]="item.quantity"
+                            (change)="updateQuantity(item, $event)"
+                            aria-label="Quantity"
+                          />
+
+                          <button
+                            type="button"
+                            aria-label="Increase quantity"
+                            (click)="increaseQuantity(item)"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                       <span class="cart-price">{{ item.price }}</span>
                     </div>

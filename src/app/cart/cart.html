@@ -33,15 +33,33 @@
               </div>
 
               <div class="qty-cell">
+                <span class="qty-label">Quantity</span>
+
                 <div class="qty-controls">
-                  <button type="button" aria-label="Decrease quantity" (click)="decrementQuantity(item.title, item.format)">-</button>
-                  <input
-                    type="number"
-                    min="1"
-                    [value]="item.quantity"
-                    (input)="updateQuantity(item.title, item.format, +($any($event.target).value || 1))"
-                  />
-                  <button type="button" aria-label="Increase quantity" (click)="incrementQuantity(item.title, item.format)">+</button>
+
+                  <button
+                    type="button"
+                    class="qty-btn qty-minus"
+                    [disabled]="item.quantity <= 1"
+                    (click)="decrementQuantity(item.title, item.format)"
+                    aria-label="Decrease quantity"
+                  >
+                    <span>−</span>
+                  </button>
+
+                  <div class="qty-value">
+                    {{ item.quantity }}
+                  </div>
+
+                  <button
+                    type="button"
+                    class="qty-btn qty-plus"
+                    (click)="incrementQuantity(item.title, item.format)"
+                    aria-label="Increase quantity"
+                  >
+                    <span>+</span>
+                  </button>
+
                 </div>
               </div>
 
