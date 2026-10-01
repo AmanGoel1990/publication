@@ -1,0 +1,250 @@
+.book-detail-page {
+  min-height: 100vh;
+  padding: 40px 20px 70px;
+  background:
+    linear-gradient(
+      180deg,
+      #f4f8fc 0%,
+      #ffffff 45%,
+      #ffffff 100%
+    );
+}
+
+/* Main container */
+.book-detail {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+/* Back button */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 10px 16px;
+  border: 1px solid #d7e2ec;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #043366;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #043366;
+  color: #ffffff;
+  border-color: #043366;
+}
+
+/* Main card */
+.book-detail-grid {
+  display: grid;
+  grid-template-columns: 420px minmax(0, 1fr);
+  gap: 60px;
+  padding: 48px;
+  background: #ffffff;
+  border: 1px solid #e5edf4;
+  border-radius: 28px;
+  box-shadow:
+    0 15px 45px rgba(4, 51, 102, 0.08),
+    0 3px 10px rgba(0, 0, 0, 0.03);
+}
+
+/* Book cover */
+.book-detail-cover {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.book-detail-cover img {
+  display: block;
+  width: 100%;
+  max-width: 370px;
+  height: auto;
+  max-height: 520px;
+  object-fit: contain;
+  border-radius: 14px;
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.16),
+    0 5px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Content */
+.book-detail-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 15px 0;
+}
+
+/* Popular tag */
+.book-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 30px;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+/* Title */
+.book-detail-content h1 {
+  margin: 18px 0 16px;
+  color: #043366;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 750;
+  line-height: 1.1;
+  letter-spacing: -0.8px;
+}
+
+/* Description */
+.description {
+  max-width: 700px;
+  margin: 0;
+  color: #596979;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* Format heading */
+.book-detail-content h3 {
+  margin: 32px 0 14px;
+  color: #043366;
+  font-size: 1.1rem;
+}
+
+/* Format buttons */
+.format-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 520px;
+}
+
+.format-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid #d8e3ed;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #043366;
+  font-size: 0.98rem;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.format-option:hover {
+  transform: translateY(-2px);
+  border-color: #043366;
+  background: #f4f8fc;
+  box-shadow: 0 7px 18px rgba(4, 51, 102, 0.08);
+}
+
+/* Hardcopy */
+.hardcopy-option {
+  background: #043366;
+  border-color: #043366;
+  color: #ffffff;
+}
+
+.hardcopy-option:hover {
+  background: #07548f;
+  border-color: #07548f;
+  color: #ffffff;
+}
+
+/* Loading */
+.book-status {
+  width: min(1180px, calc(100% - 40px));
+  margin: 80px auto;
+  padding: 50px;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #596979;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(4, 51, 102, 0.07);
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .book-detail-page {
+    padding: 30px 16px 50px;
+  }
+
+  .book-detail-grid {
+    grid-template-columns: 320px 1fr;
+    gap: 35px;
+    padding: 32px;
+  }
+
+  .book-detail-content h1 {
+    font-size: 2.3rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .book-detail-page {
+    padding: 20px 14px 40px;
+  }
+
+  .back-btn {
+    margin-bottom: 18px;
+  }
+
+  .book-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 22px 18px 28px;
+    border-radius: 20px;
+  }
+
+  .book-detail-cover img {
+    max-width: 280px;
+    max-height: 420px;
+  }
+
+  .book-detail-content {
+    padding: 0;
+  }
+
+  .book-detail-content h1 {
+    margin-top: 14px;
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .book-detail-content h3 {
+    margin-top: 25px;
+  }
+
+  .format-options {
+    max-width: none;
+  }
+
+  .format-option {
+    padding: 14px 16px;
+  }
+}

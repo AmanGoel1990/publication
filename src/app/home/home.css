@@ -276,6 +276,11 @@ button:hover {
   border-radius: 18px;
   background: linear-gradient(180deg, #f4efe7, #f8f3ec);
 }
+.book-cover {
+  cursor: pointer;
+}
+
+
 
 .book-cover img,
 .cover-wrap img,

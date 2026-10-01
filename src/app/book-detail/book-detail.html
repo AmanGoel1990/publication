@@ -1,0 +1,86 @@
+<div class="book-detail-page">
+
+  @if (isLoading) {
+
+    <p class="book-status">
+      Loading book details...
+    </p>
+
+  } @else if (book) {
+
+    <main class="book-detail">
+
+      <button
+        type="button"
+        class="back-btn"
+        (click)="goBack()"
+      >
+        ← Back to Books
+      </button>
+
+      <div class="book-detail-grid">
+
+        <div class="book-detail-cover">
+          @if (book.pdf) {
+            <app-pdf-cover
+              [pdfUrl]="book.pdf"
+              [title]="book.title"
+            />
+          } @else {
+            <img
+              [src]="book.image"
+              [alt]="book.title"
+            />
+          }
+        </div>
+
+        <div class="book-detail-content">
+
+          <span
+            class="book-tag"
+            [style.background]="book.accent"
+          >
+            Popular
+          </span>
+
+          <h1>{{ book.title }}</h1>
+
+          <p class="description">
+            {{ book.description }}
+          </p>
+
+          <h3>Choose a format</h3>
+
+          <div class="format-options">
+
+            <button
+              type="button"
+              class="format-option hardcopy-option"
+              (click)="addToCart(book, 'Hardcopy')"
+            >
+              <span>Hardcopy</span>
+              <span>{{ book.hardcopyPrice }}</span>
+            </button>
+
+            @if (book.pdf) {
+              <button
+                type="button"
+                class="format-option ebook-option"
+                (click)="addToCart(book, 'E-book')"
+              >
+                <span>E-book</span>
+                <span>{{ book.ebookPrice }}</span>
+              </button>
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  }
+
+</div>

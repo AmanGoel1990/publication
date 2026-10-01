@@ -137,6 +137,7 @@ export class Integration {
   private normalizeBook(book: Partial<ApiBook> | null | undefined): ApiBook {
     if (!book) {
       return {
+        id: '',
         title: '',
         price: '',
         image: '',
@@ -148,7 +149,7 @@ export class Integration {
     }
 
     return {
-      id: book.id,
+      id: book.id ?? '',
       title: book.title ?? 'Untitled Book',
       author: book.author ?? '',
       price: book.price ?? '',
@@ -165,6 +166,7 @@ export class Integration {
   }
 
   private toApiBookPayload(book: Partial<ApiBook>): {
+    id: number | string;
     title: string;
     author: string;
     description: string;
@@ -176,6 +178,7 @@ export class Integration {
   } {
     const hardcopyPrice = Number(book.hardcopyprice ?? book.hardcopyPrice ?? book.price ?? 0);
     return {
+      id: book.id ?? '',
       title: book.title ?? '',
       author: book.author ?? '',
       description: book.description ?? '',

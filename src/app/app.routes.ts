@@ -7,6 +7,7 @@ import { Dashboard } from './dashboard/dashboard';
 import { Contact } from './contact/contact';
 import { Cart } from './cart/cart';
 import { About } from './about/about';
+import { BookDetail  } from './book-detail/book-detail';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -17,5 +18,6 @@ export const routes: Routes = [
     { path: 'signin', component: Signin },
     { path: 'register', component: Register },
     // { path: 'contact', loadComponent: () => import('./contact/contact').then((module) => module.Contact) },
-    { path: 'contact', component: Contact }
+    { path: 'contact', component: Contact },
+    { path: 'book/:id',component: BookDetail}
 ];

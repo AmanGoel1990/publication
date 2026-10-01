@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../cart.service';
 import { Integration } from '../services/integration';
 import { PdfCover } from '../pdf-cover/pdf-cover';
+import { Router } from '@angular/router';
 
 type Book = {
+  id: number | string;
   title: string;
   hardcopyPrice: string;
   ebookPrice: string;
@@ -26,12 +28,19 @@ export class Home {
   constructor(
     private integration: Integration,
     private cartService: CartService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.integration.getBooks().subscribe({
       next: (books) => {
-        this.featuredBooks = books.map((book) => ({
+        this.featuredBooks = books
+          .filter(
+            (book) =>
+              book.id !== undefined &&
+              book.id !== null
+          ).map((book) => ({
+          id: book.id ?? '',
           title: book.title ?? 'Untitled Book',
           hardcopyPrice: `₹${book.hardcopyprice}`,
           ebookPrice: `₹${book.ebookprice}`,
@@ -49,7 +58,10 @@ export class Home {
       },
     });
   }
-
+  openBookDetails(book: Book): void {
+    console.log('BOOK CLICKED:', book);
+    this.router.navigate(['/book', book.id]);
+  }
   addToCart(product: { title: string; price: string; format: 'Hardcopy' | 'E-book' }): void {
     this.cartService.addToCart(product);
   }
