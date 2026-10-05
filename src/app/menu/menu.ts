@@ -81,6 +81,16 @@ export class Menu {
       quantity
     );
   }
+
+  getItemTotal(item: any): number {
+  const price = Number(
+    String(item.price).replace(/[^\d.-]/g, '')
+  ) || 0;
+
+  const quantity = Number(item.quantity) || 1;
+
+  return price * quantity;
+}
   toggleCart(): void {
     this.isCartOpen = !this.isCartOpen;
   }
@@ -119,6 +129,7 @@ export class Menu {
 
     this.router.navigate(['/signin']);
   }
+  
 
   logout(): void {
     if (typeof localStorage !== 'undefined') {
