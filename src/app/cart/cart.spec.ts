@@ -33,4 +33,36 @@ describe('Cart', () => {
     expect(compiled.textContent).toContain('Marmacikitsa');
     expect(compiled.textContent).toContain('Hardcopy');
   });
+
+  it('should remove an item when decreasing its quantity from one', () => {
+    component.decrementQuantity('Marmacikitsa', 'Hardcopy');
+
+    expect(cartService.items).toEqual([]);
+  });
+
+  it('should decrease an item quantity when it is greater than one', () => {
+    cartService.updateQuantity('Marmacikitsa', 'Hardcopy', 2);
+
+    component.decrementQuantity('Marmacikitsa', 'Hardcopy');
+
+    expect(cartService.items[0].quantity).toBe(1);
+  });
+
+  it('should restore cart items after the service is recreated', () => {
+    cartService.addToCart({
+      title: 'Yoga',
+      price: '₹300',
+      format: 'E-book',
+    });
+
+    const restoredCartService = new CartService();
+
+    expect(restoredCartService.items).toContain(
+      jasmine.objectContaining({
+        title: 'Yoga',
+        format: 'E-book',
+        quantity: 1,
+      }),
+    );
+  });
 });

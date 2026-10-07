@@ -100,8 +100,8 @@ export class Cart {
       return;
     }
 
-    // Minimum quantity is 1
     if (item.quantity <= 1) {
+      this.removeItem(title, format);
       return;
     }
 

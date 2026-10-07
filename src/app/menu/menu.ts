@@ -57,6 +57,7 @@ export class Menu {
 
   decreaseQuantity(item: any): void {
     if (item.quantity <= 1) {
+      this.cartService.removeItem(item.title, item.format);
       return;
     }
 

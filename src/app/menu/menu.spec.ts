@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
 
 import { Menu } from './menu';
+import { CartService } from '../cart.service';
 
 describe('Menu', () => {
   let component: Menu;
@@ -9,6 +11,7 @@ describe('Menu', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Menu],
+      providers: [provideRouter([{ path: '', component: Menu }])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Menu);
@@ -18,6 +21,39 @@ describe('Menu', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should keep cart items when navigating home from the logo', async () => {
+    const cartService = TestBed.inject(CartService);
+    const router = TestBed.inject(Router);
+    cartService.addToCart({
+      title: 'Marmacikitsa',
+      price: '₹500',
+      format: 'Hardcopy',
+    });
+
+    const logoLink = fixture.nativeElement.querySelector(
+      '.logo-link',
+    ) as HTMLAnchorElement;
+    logoLink.click();
+    await fixture.whenStable();
+
+    expect(router.url).toBe('/');
+    expect(cartService.cartCount).toBe(1);
+    expect(cartService.items[0].title).toBe('Marmacikitsa');
+  });
+
+  it('should remove an item when decreasing its quantity from one', () => {
+    const cartService = TestBed.inject(CartService);
+    cartService.addToCart({
+      title: 'Marmacikitsa',
+      price: '₹500',
+      format: 'Hardcopy',
+    });
+
+    component.decreaseQuantity(cartService.items[0]);
+
+    expect(cartService.items).toEqual([]);
   });
 
   // it('should expose publication books for the menu', () => {

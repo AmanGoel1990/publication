@@ -7,23 +7,25 @@ export type CartItem = {
   quantity: number;
 };
 
+const CART_STORAGE_KEY = 'mdniy-cart-items';
+
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private readonly itemsState = signal<CartItem[]>([]);
+  private readonly itemsState = signal<CartItem[]>(this.loadItems());
 
   get items(): CartItem[] {
     return this.itemsState();
   }
 
   set items(items: CartItem[]) {
-    this.itemsState.set(items);
+    this.setItems(items);
   }
 
   addToCart(item: { title: string; price: string; format?: 'Hardcopy' | 'E-book' }): void {
     const format = item.format ?? 'Hardcopy';
-    this.itemsState.update((items) => {
+    this.updateItems((items) => {
       const existingItem = items.find(
         (cartItem) => cartItem.title === item.title && cartItem.format === format,
       );
@@ -41,7 +43,7 @@ export class CartService {
   }
 
   updateQuantity(title: string, format: 'Hardcopy' | 'E-book', quantity: number): void {
-    this.itemsState.update((items) =>
+    this.updateItems((items) =>
       items.map((item) =>
         item.title === title && item.format === format
           ? { ...item, quantity: Math.max(1, quantity) }
@@ -51,7 +53,7 @@ export class CartService {
   }
 
   removeItem(title: string, format: 'Hardcopy' | 'E-book'): void {
-    this.itemsState.update((items) =>
+    this.updateItems((items) =>
       items.filter((cartItem) => !(cartItem.title === title && cartItem.format === format)),
     );
   }
@@ -65,5 +67,52 @@ export class CartService {
       const numericPrice = Number(String(item.price).replace(/[^\d]/g, '')) || 0;
       return total + numericPrice * item.quantity;
     }, 0);
+  }
+
+  private loadItems(): CartItem[] {
+    if (typeof localStorage === 'undefined') {
+      return [];
+    }
+
+    try {
+      const storedItems: unknown = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) ?? '[]');
+      if (
+        Array.isArray(storedItems) &&
+        storedItems.every(
+          (item): item is CartItem =>
+            typeof item?.title === 'string' &&
+            typeof item?.price === 'string' &&
+            (item?.format === 'Hardcopy' || item?.format === 'E-book') &&
+            Number.isInteger(item?.quantity) &&
+            item.quantity > 0,
+        )
+      ) {
+        return storedItems;
+      }
+
+      console.error('Stored cart data is invalid.');
+    } catch (error) {
+      console.error('Failed to read stored cart data.', error);
+    }
+
+    return [];
+  }
+
+  private updateItems(update: (items: CartItem[]) => CartItem[]): void {
+    this.setItems(update(this.itemsState()));
+  }
+
+  private setItems(items: CartItem[]): void {
+    this.itemsState.set(items);
+
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    } catch (error) {
+      console.error('Failed to save cart data.', error);
+    }
   }
 }

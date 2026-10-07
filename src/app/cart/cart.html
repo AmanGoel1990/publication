@@ -40,9 +40,8 @@
                   <button
                     type="button"
                     class="qty-btn qty-minus"
-                    [disabled]="item.quantity <= 1"
                     (click)="decrementQuantity(item.title, item.format)"
-                    aria-label="Decrease quantity"
+                    [attr.aria-label]="item.quantity <= 1 ? 'Remove item' : 'Decrease quantity'"
                   >
                     <span>−</span>
                   </button>
