@@ -1,14 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-menu',
   imports: [RouterLink],
+  host: {
+    '(document:click)': 'closeCartOnOutsideClick($event)',
+  },
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
 export class Menu {
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+
   // readonly navItems = ['Home', 'Publications', 'Special Offers', 'About MDNIY', 'Contact'];
   readonly navItems = ['Home', 'Publications', 'About', 'Contact'];
   isCartOpen = false;
@@ -94,6 +99,13 @@ export class Menu {
 }
   toggleCart(): void {
     this.isCartOpen = !this.isCartOpen;
+  }
+
+  closeCartOnOutsideClick(event: MouseEvent): void {
+    const cartWrapper = this.elementRef.nativeElement.querySelector('.cart-wrapper');
+    if (cartWrapper && event.target instanceof Node && !cartWrapper.contains(event.target)) {
+      this.isCartOpen = false;
+    }
   }
 
   toggleMenu(): void {

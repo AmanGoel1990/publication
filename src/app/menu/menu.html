@@ -37,7 +37,7 @@
         }
 
         <div class="cart-wrapper">
-          <button type="button" class="cart-pill" aria-label="Shopping cart" (click)="toggleCart()">
+          <button type="button" class="cart-pill" aria-label="Shopping cart" [attr.aria-expanded]="isCartOpen" (click)="toggleCart()">
             <span aria-hidden="true" class="cart-icon">🛒</span>
             <span class="cart-label">Cart</span>
             @if (cartCount > 0) {

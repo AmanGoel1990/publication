@@ -56,6 +56,36 @@ describe('Menu', () => {
     expect(cartService.items).toEqual([]);
   });
 
+  it('should close the cart popup when clicking outside it', () => {
+    component.isCartOpen = true;
+    fixture.detectChanges();
+
+    const outsideButton = fixture.nativeElement.querySelector(
+      '.menu-toggle',
+    ) as HTMLButtonElement;
+    outsideButton.click();
+
+    expect(component.isCartOpen).toBeFalse();
+  });
+
+  it('should keep the cart popup open when clicking inside it', () => {
+    const cartService = TestBed.inject(CartService);
+    cartService.addToCart({
+      title: 'Marmacikitsa',
+      price: '₹500',
+      format: 'Hardcopy',
+    });
+    component.isCartOpen = true;
+    fixture.detectChanges();
+
+    const dropdown = fixture.nativeElement.querySelector(
+      '.cart-dropdown',
+    ) as HTMLElement;
+    dropdown.click();
+
+    expect(component.isCartOpen).toBeTrue();
+  });
+
   // it('should expose publication books for the menu', () => {
   //   expect(component.publicationBooks.length).toBeGreaterThan(0);
   //   expect(component.publicationBooks[0].title).toContain('Yoga');
