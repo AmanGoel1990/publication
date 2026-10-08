@@ -155,6 +155,7 @@ export class Menu {
   
 
   logout(): void {
+    this.isUserMenuOpen = false;
     if (typeof localStorage !== 'undefined') {
       localStorage.removeItem('mdniy-auth-session');
     }
