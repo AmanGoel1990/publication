@@ -216,18 +216,34 @@
   gap: 8px;
 }
 
-.user-icon-btn {
+.user-icon-btn,
+.user-name-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
   height: 42px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   color: #f7f3ea;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.user-icon-btn {
+  width: 42px;
+  border-radius: 50%;
+}
+
+.user-menu-wrapper {
+  position: relative;
+}
+
+.user-name-btn {
+  gap: 9px;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
 }
 
 .user-badge {
@@ -271,6 +287,23 @@
 .auth-btn.secondary {
   background: rgba(255, 255, 255, 0.08);
   color: #f7f3ea;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  min-width: 150px;
+  padding: 8px;
+  border: 1px solid rgba(245, 215, 123, 0.35);
+  border-radius: 12px;
+  background: #0d5b45;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+}
+
+.user-dropdown .auth-btn {
+  width: 100%;
 }
 
 .auth-btn.primary {
@@ -519,6 +552,7 @@
 }
 
 .user-icon-btn:hover,
+.user-name-btn:hover,
 .auth-btn:hover,
 .cart-pill:hover,
 .primary-btn:hover {
@@ -623,6 +657,8 @@
   }
 
   .user-icon-btn,
+  .user-name-btn,
+  .user-menu-wrapper,
   .auth-btn,
   .cart-pill,
   .primary-btn {

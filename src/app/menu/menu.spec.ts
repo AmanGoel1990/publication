@@ -19,6 +19,10 @@ describe('Menu', () => {
     await fixture.whenStable();
   });
 
+  afterEach(() => {
+    localStorage.removeItem('mdniy-auth-session');
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -66,6 +70,25 @@ describe('Menu', () => {
     outsideButton.click();
 
     expect(component.isCartOpen).toBeFalse();
+  });
+
+  it('should show logout only after opening the logged-in user menu', () => {
+    localStorage.setItem(
+      'mdniy-auth-session',
+      JSON.stringify({ username: 'Asha', role: 'user' }),
+    );
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Asha');
+    expect(fixture.nativeElement.textContent).not.toContain('Logout');
+
+    const userMenuButton = fixture.nativeElement.querySelector(
+      '.user-name-btn',
+    ) as HTMLButtonElement;
+    userMenuButton.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Logout');
   });
 
   it('should keep the cart popup open when clicking inside it', () => {

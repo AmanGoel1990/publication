@@ -17,6 +17,7 @@ export class Menu {
   // readonly navItems = ['Home', 'Publications', 'Special Offers', 'About MDNIY', 'Contact'];
   readonly navItems = ['Home', 'Publications', 'About', 'Contact'];
   isCartOpen = false;
+  isUserMenuOpen = false;
   isMenuOpen = true;
 
   constructor(
@@ -106,6 +107,15 @@ export class Menu {
     if (cartWrapper && event.target instanceof Node && !cartWrapper.contains(event.target)) {
       this.isCartOpen = false;
     }
+
+    const userMenuWrapper = this.elementRef.nativeElement.querySelector('.user-menu-wrapper');
+    if (userMenuWrapper && event.target instanceof Node && !userMenuWrapper.contains(event.target)) {
+      this.isUserMenuOpen = false;
+    }
+  }
+
+  toggleUserMenu(): void {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
   }
 
   toggleMenu(): void {

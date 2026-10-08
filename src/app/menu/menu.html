@@ -24,10 +24,24 @@
 
       <div class="topbar-actions">
         @if (isLoggedIn) {
-          <button type="button" class="user-icon-btn" aria-label="Current user" title="{{ currentUser }}" (click)="openLogin()">
-            <span class="user-badge">{{ currentUser.charAt(0).toUpperCase() }}</span>
-          </button>
-          <button type="button" class="auth-btn secondary" (click)="logout()">Logout</button>
+          <div class="user-menu-wrapper">
+            <button
+              type="button"
+              class="user-name-btn"
+              aria-label="Account menu"
+              [attr.aria-expanded]="isUserMenuOpen"
+              aria-haspopup="true"
+              (click)="toggleUserMenu()"
+            >
+              <span class="user-badge">{{ currentUser.charAt(0).toUpperCase() }}</span>
+              <span>{{ currentUser }}</span>
+            </button>
+            @if (isUserMenuOpen) {
+              <div class="user-dropdown">
+                <button type="button" class="auth-btn secondary" (click)="logout()">Logout</button>
+              </div>
+            }
+          </div>
         } @else {
           <button type="button" class="user-icon-btn" aria-label="User login" title="Login" (click)="openLogin()">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
