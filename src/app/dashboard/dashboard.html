@@ -1,4 +1,23 @@
 <section class="dashboard-page">
+  <header class="dashboard-topbar">
+    <a class="dashboard-brand" routerLink="/" aria-label="MDNIY Publications home">
+      <img
+        class="dashboard-brand-logo"
+        ngSrc="/logo.jpeg"
+        width="52"
+        height="52"
+        alt="Morarji Desai National Institute of Yoga logo"
+        priority
+      />
+      <span class="dashboard-brand-copy">
+        <strong>MDNIY</strong>
+        <span>Morarji Desai National Institute of Yoga</span>
+        <span class="dashboard-brand-section">Publications / Admin</span>
+      </span>
+    </a>
+    <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+  </header>
+
   <div class="dashboard-header">
     <div>
       <p class="eyebrow">Dashboard</p>
@@ -6,7 +25,6 @@
     </div>
     <div class="dashboard-header-actions">
       <span class="total-books">{{ books.length }} Books</span>
-      <button type="button" class="logout-btn" (click)="logout()">Logout</button>
     </div>
   </div>
 

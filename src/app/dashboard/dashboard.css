@@ -4,6 +4,60 @@
   margin: 0 auto;
 }
 
+.dashboard-topbar {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 88px;
+  padding: 12px max(24px, calc((100% - 1232px) / 2));
+  border-bottom: 3px solid #d8e1dc;
+  background: #fff;
+  box-shadow: 0 5px 20px rgb(17 45 34 / 9%);
+}
+
+.dashboard-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.dashboard-brand-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.dashboard-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.15;
+}
+
+.dashboard-brand-copy strong {
+  color: #173e32;
+  font-size: 0.98rem;
+  letter-spacing: 0.045em;
+}
+
+.dashboard-brand-copy span {
+  color: #4d5f55;
+  font-size: 0.66rem;
+}
+
+.dashboard-brand-copy .dashboard-brand-section {
+  color: #9b5d18;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
 .dashboard-header {
   display: flex;
   align-items: center;
@@ -43,9 +97,10 @@
 }
 
 .logout-btn {
+  min-height: 40px;
   border: 1px solid #b42318;
-  border-radius: 999px;
-  padding: 10px 16px;
+  border-radius: 8px;
+  padding: 0 16px;
   background: #fff;
   color: #b42318;
   font: inherit;
@@ -465,6 +520,15 @@
 }
 
 @media (max-width: 840px) {
+  .dashboard-topbar {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .dashboard-brand-copy span:not(.dashboard-brand-section) {
+    max-width: 210px;
+  }
+
   .dashboard-layout {
     grid-template-columns: 1fr;
   }
@@ -476,6 +540,36 @@
 
   .dashboard-header-actions {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-topbar {
+    min-height: 76px;
+    padding: 10px 14px;
+  }
+
+  .dashboard-brand {
+    gap: 8px;
+  }
+
+  .dashboard-brand-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .dashboard-brand-copy span:not(.dashboard-brand-section) {
+    max-width: 155px;
+    font-size: 0.58rem;
+  }
+
+  .dashboard-brand-copy .dashboard-brand-section {
+    font-size: 0.64rem;
+  }
+
+  .dashboard-topbar .logout-btn {
+    min-height: 36px;
+    padding: 0 10px;
   }
 }
