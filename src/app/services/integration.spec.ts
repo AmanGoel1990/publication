@@ -59,6 +59,43 @@ describe('Integration', () => {
     httpMock.expectNone('http://localhost:8080/api/books');
   });
 
+  it('fetches only users with the user role from the users API', () => {
+    let result: unknown;
+
+    service.getUsers().subscribe((users) => {
+      result = users;
+    });
+
+    const req = httpMock.expectOne('http://localhost:8080/api/users');
+    expect(req.request.method).toBe('GET');
+    req.flush([
+      { id: 1, name: 'Jane Doe', username: 'jane', email: 'jane@example.com', phone: '1234567890', role: 'user' },
+      { id: 2, name: 'Admin', username: 'admin', email: 'admin@example.com', role: 'admin' },
+      { id: 3, name: 'Unassigned', username: 'guest', email: 'guest@example.com' },
+    ]);
+
+    expect(result).toEqual([
+      { id: 1, name: 'Jane Doe', username: 'jane', email: 'jane@example.com', phone: '1234567890', role: 'user' },
+    ]);
+  });
+
+  it('reads registered users from a wrapped API response', () => {
+    let result: unknown;
+
+    service.getUsers().subscribe((users) => {
+      result = users;
+    });
+
+    httpMock.expectOne('http://localhost:8080/api/users').flush({
+      data: [
+        { id: 2, username: 'alex', role: 'USER' },
+        { id: 3, username: 'admin', role: 'administrator' },
+      ],
+    });
+
+    expect(result).toEqual([{ id: 2, username: 'alex', role: 'USER' }]);
+  });
+
   it('uploads a book PDF and returns its public path', () => {
     const file = new File(['book contents'], 'book.pdf', { type: 'application/pdf' });
     let result: { pdfUrl: string } | undefined;

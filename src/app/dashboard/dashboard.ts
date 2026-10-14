@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { Integration } from '../services/integration';
+import { ApiUser, Integration } from '../services/integration';
 import { PdfCover } from '../pdf-cover/pdf-cover';
 
 type DashboardBook = {
@@ -23,7 +23,7 @@ type DashboardBook = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, PdfCover],
+  imports: [CommonModule, FormsModule, PdfCover, NgOptimizedImage, RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -31,6 +31,11 @@ export class Dashboard implements OnInit {
   @ViewChild('bookPdfInput') bookPdfInput?: ElementRef<HTMLInputElement>;
 
   books: DashboardBook[] = [];
+  users: ApiUser[] = [];
+  activeSection: 'books' | 'users' = 'books';
+  usersLoading = false;
+  usersError = '';
+  private usersLoaded = false;
 
   editingIndex: number | null = null;
   editingId: number | string | null = null;
@@ -68,6 +73,29 @@ export class Dashboard implements OnInit {
     }
 
     this.router.navigate(['/admin']);
+  }
+
+  selectSection(section: 'books' | 'users'): void {
+    this.activeSection = section;
+    if (section === 'users' && !this.usersLoaded && !this.usersLoading) {
+      this.loadUsers();
+    }
+  }
+
+  private loadUsers(): void {
+    this.usersLoading = true;
+    this.usersError = '';
+    this.integration.getUsers().subscribe({
+      next: (users) => {
+        this.users = users;
+        this.usersLoaded = true;
+        this.usersLoading = false;
+      },
+      error: () => {
+        this.usersLoading = false;
+        this.usersError = 'Users could not be loaded. Check that the users API is available.';
+      },
+    });
   }
 
   loadBooks(): void {

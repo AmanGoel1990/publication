@@ -6,6 +6,7 @@ import { Observable, map, shareReplay, tap } from 'rxjs';
 
 const LOGIN_API_URL = 'http://localhost:8080/api/login';
 const REGISTER_API_URL = 'http://localhost:8080/api/register';
+const USERS_API_URL = 'http://localhost:8080/api/users';
 const BOOKS_API_URL = 'http://localhost:8080/api/books';
 const BOOK_IMAGE_UPLOAD_URL = '/public/books';
 
@@ -24,6 +25,15 @@ type ApiBook = {
   description?: string;
   type?: 'new' | 'old';
   accent?: string;
+};
+
+export type ApiUser = {
+  id?: number | string;
+  name?: string;
+  username?: string;
+  email?: string;
+  phone?: string;
+  role?: string;
 };
 
 @Injectable({
@@ -77,6 +87,17 @@ export class Integration {
     }
 
     return this.booksCache$;
+  }
+
+  getUsers(): Observable<ApiUser[]> {
+    return this.http.get<ApiUser[] | { data?: ApiUser[]; users?: ApiUser[] }>(USERS_API_URL).pipe(
+      map((response) => {
+        const users = Array.isArray(response) ? response : response?.data ?? response?.users ?? [];
+        return users.filter(
+          (user) => String(user.role ?? '').trim().toLowerCase().replace(/^role[_\s-]?/, '') === 'user',
+        );
+      }),
+    );
   }
 
   addBook(book: ApiBook): Observable<ApiBook> {

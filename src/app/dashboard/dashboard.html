@@ -21,18 +21,51 @@
   <div class="dashboard-header">
     <div>
       <p class="eyebrow">Dashboard</p>
-      <h2>Book Management Panel</h2>
+      <h2>{{ activeSection === 'books' ? 'Book Management Panel' : 'User Management' }}</h2>
     </div>
     <div class="dashboard-header-actions">
-      <span class="total-books">{{ books.length }} Books</span>
+      @if (activeSection === 'books') {
+        <span class="total-books">{{ books.length }} Books</span>
+      } @else {
+        <span class="total-books">{{ users.length }} Users</span>
+      }
     </div>
   </div>
 
-  <div class="dashboard-layout">
-    <aside class="book-form-panel">
-      <h3>{{ editingIndex !== null ? 'Edit Book' : 'Add New Book' }}</h3>
+  <div class="dashboard-workspace">
+    <nav class="dashboard-sidebar" aria-label="Dashboard menu">
+      <p class="sidebar-heading">Menu</p>
+      <button
+        type="button"
+        class="sidebar-link"
+        [class.active]="activeSection === 'books'"
+        [attr.aria-current]="activeSection === 'books' ? 'page' : null"
+        (click)="selectSection('books')"
+      >
+        <span class="sidebar-link-icon" aria-hidden="true">▤</span>
+        <span>Books</span>
+        <span class="sidebar-count">{{ books.length }}</span>
+      </button>
+      <button
+        type="button"
+        class="sidebar-link"
+        [class.active]="activeSection === 'users'"
+        [attr.aria-current]="activeSection === 'users' ? 'page' : null"
+        (click)="selectSection('users')"
+      >
+        <span class="sidebar-link-icon" aria-hidden="true">♙</span>
+        <span>Users</span>
+        <span class="sidebar-count">{{ users.length }}</span>
+      </button>
+    </nav>
 
-      <form class="book-form" (ngSubmit)="submitBook()">
+    <main class="dashboard-main">
+      @if (activeSection === 'books') {
+        <div class="dashboard-layout">
+          <aside class="book-form-panel">
+            <h3>{{ editingIndex !== null ? 'Edit Book' : 'Add New Book' }}</h3>
+
+            <form class="book-form" (ngSubmit)="submitBook()">
         <label>
           <span>Book title</span>
           <input type="text" [(ngModel)]="form.title" name="title" placeholder="Enter title" />
@@ -124,11 +157,14 @@
           </button>
           <button type="button" class="secondary-btn" (click)="resetForm()" [disabled]="uploadingPdf">Clear</button>
         </div>
-      </form>
-    </aside>
+            </form>
+          </aside>
 
-    <div class="book-list-panel">
-      <div class="book-grid">
+          <div class="book-list-panel">
+            @if (books.length === 0) {
+              <p class="books-empty">No books found. Add a book using the form.</p>
+            } @else {
+              <div class="book-grid">
         @for (book of books; track $index) {
           <article class="book-card">
             @if (book.pdf) {
@@ -153,8 +189,53 @@
             </div>
           </article>
         }
-      </div>
-    </div>
+              </div>
+            }
+          </div>
+        </div>
+      } @else {
+        <section class="users-panel" aria-labelledby="users-heading">
+          <div class="users-panel-header">
+            <div>
+              <p class="eyebrow">Registered accounts</p>
+              <h3 id="users-heading">Users</h3>
+            </div>
+            <span class="total-books">{{ users.length }} Users</span>
+          </div>
+
+          @if (usersLoading) {
+            <p class="users-status" role="status">Loading users...</p>
+          } @else if (usersError) {
+            <p class="users-status users-error" role="alert">{{ usersError }}</p>
+          } @else if (users.length === 0) {
+            <p class="users-status">No registered users found.</p>
+          } @else {
+            <div class="users-table-wrap">
+              <table class="users-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (user of users; track user.id ?? user.username ?? user.email ?? $index) {
+                    <tr>
+                      <td>{{ user.name || '—' }}</td>
+                      <td>{{ user.username || '—' }}</td>
+                      <td>{{ user.email || '—' }}</td>
+                      <td>{{ user.phone || '—' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </section>
+      }
+    </main>
   </div>
 
   @if (uploadingPdf) {
