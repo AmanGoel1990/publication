@@ -5,7 +5,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { ApiUser, Integration } from '../services/integration';
-import { PdfCover } from '../pdf-cover/pdf-cover';
 
 type DashboardBook = {
   id?: number | string;
@@ -23,7 +22,7 @@ type DashboardBook = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, PdfCover, NgOptimizedImage, RouterLink],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -33,6 +32,7 @@ export class Dashboard implements OnInit {
   books: DashboardBook[] = [];
   users: ApiUser[] = [];
   activeSection: 'books' | 'users' = 'books';
+  isBookFormOpen = false;
   usersLoading = false;
   usersError = '';
   private usersLoaded = false;
@@ -96,6 +96,20 @@ export class Dashboard implements OnInit {
         this.usersError = 'Users could not be loaded. Check that the users API is available.';
       },
     });
+  }
+
+  openNewBookForm(): void {
+    this.resetForm();
+    this.saveSuccess = '';
+    this.isBookFormOpen = true;
+  }
+
+  closeBookForm(): void {
+    if (this.uploadingPdf) {
+      return;
+    }
+
+    this.resetForm();
   }
 
   loadBooks(): void {
@@ -222,6 +236,9 @@ export class Dashboard implements OnInit {
     this.form = { ...selected };
     this.editingIndex = index;
     this.editingId = selected.id ?? null;
+    this.uploadError = '';
+    this.saveSuccess = '';
+    this.isBookFormOpen = true;
   }
 
   deleteBook(index: number): void {
@@ -306,5 +323,6 @@ export class Dashboard implements OnInit {
     };
     this.editingIndex = null;
     this.editingId = null;
+    this.isBookFormOpen = false;
   }
 }
