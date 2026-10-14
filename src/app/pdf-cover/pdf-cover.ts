@@ -83,6 +83,8 @@ export class PdfCover implements AfterViewInit, OnChanges, OnDestroy {
 
         const context = canvas.getContext('2d');
         if (context) {
+          context.fillStyle = '#fff';
+          context.fillRect(0, 0, canvas.width, canvas.height);
           await page.render({ canvas, canvasContext: context, viewport }).promise;
         }
       } finally {
