@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { Integration } from '../services/integration';
 import { PdfCover } from '../pdf-cover/pdf-cover';
@@ -54,10 +55,19 @@ export class Dashboard implements OnInit {
   constructor(
     private integration: Integration,
     private changeDetectorRef: ChangeDetectorRef,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.loadBooks();
+  }
+
+  logout(): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('mdniy-auth-session');
+    }
+
+    this.router.navigate(['/admin']);
   }
 
   loadBooks(): void {

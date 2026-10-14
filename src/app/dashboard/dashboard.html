@@ -4,7 +4,10 @@
       <p class="eyebrow">Dashboard</p>
       <h2>Book Management Panel</h2>
     </div>
-    <span class="total-books">{{ books.length }} Books</span>
+    <div class="dashboard-header-actions">
+      <span class="total-books">{{ books.length }} Books</span>
+      <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+    </div>
   </div>
 
   <div class="dashboard-layout">

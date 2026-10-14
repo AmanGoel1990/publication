@@ -1,0 +1,172 @@
+:host {
+  display: block;
+}
+
+.admin-login-page {
+  display: grid;
+  min-height: calc(100vh - 110px);
+  place-items: center;
+  padding: 48px 24px;
+  background: #f2f5f3;
+}
+
+.admin-login-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.82fr);
+  width: min(100%, 1000px);
+  overflow: hidden;
+  border: 1px solid #e0e7e2;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgb(23 48 37 / 12%);
+}
+
+.admin-intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 500px;
+  padding: 56px;
+  color: #fff;
+  background: linear-gradient(145deg, #123c30, #176a4d);
+}
+
+.admin-mark {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 32px;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 16px;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.admin-eyebrow,
+.form-eyebrow {
+  margin: 0 0 12px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.admin-eyebrow {
+  color: #c2dfcf;
+}
+
+.admin-intro h1 {
+  max-width: 380px;
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  line-height: 1.08;
+}
+
+.admin-intro-copy {
+  max-width: 360px;
+  margin: 20px 0 0;
+  color: #d4e5da;
+  line-height: 1.7;
+}
+
+.admin-form-panel {
+  align-self: center;
+  padding: 56px 48px;
+}
+
+.form-eyebrow {
+  color: #18734f;
+}
+
+.admin-form-panel h2 {
+  margin: 0;
+  color: #18352a;
+  font-size: clamp(1.6rem, 3vw, 2rem);
+}
+
+.form-description {
+  margin: 12px 0 30px;
+  color: #5f6e65;
+  line-height: 1.6;
+}
+
+.admin-form-panel form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-form-panel label {
+  margin-top: 8px;
+  color: #253c30;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.admin-form-panel input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #cbd6ce;
+  border-radius: 10px;
+  background: #fff;
+  color: #1e2c23;
+  font: inherit;
+}
+
+.admin-form-panel input:focus-visible {
+  outline: 3px solid rgb(24 115 79 / 24%);
+  border-color: #18734f;
+}
+
+.login-error {
+  margin: 4px 0;
+  color: #b42318;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.admin-submit {
+  min-height: 50px;
+  margin-top: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #176a4d;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-submit:hover {
+  background: #12563e;
+}
+
+.admin-submit:focus-visible {
+  outline: 3px solid rgb(24 115 79 / 35%);
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .admin-login-page {
+    padding: 24px 16px;
+  }
+
+  .admin-login-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-intro {
+    min-height: auto;
+    padding: 32px 28px;
+  }
+
+  .admin-mark {
+    margin-bottom: 20px;
+  }
+
+  .admin-form-panel {
+    padding: 36px 28px;
+  }
+}

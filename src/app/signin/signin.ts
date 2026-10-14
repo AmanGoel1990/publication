@@ -20,23 +20,15 @@ export class Signin {
   password = '';
   loginError = '';
   isLoggedIn = false;
-  isUserRole = false;
 
   constructor(
     private router: Router,
     private integration: Integration,
   ) {
     const savedSession = this.getSession();
-    if (savedSession) {
+    if (savedSession && ['user', 'customer'].includes(savedSession.role.toLowerCase())) {
       this.username = savedSession.username;
       this.isLoggedIn = true;
-      this.isUserRole = savedSession.role === 'user' || savedSession.role === 'customer';
-    }
-  }
-
-  ngOnInit(): void {
-    if (this.isLoggedIn) {
-      this.router.navigate([this.isUserRole ? '/cart' : '/dashboard']);
     }
   }
 
@@ -58,14 +50,26 @@ export class Signin {
             (response as { role?: string; userRole?: string; roleName?: string } | undefined)?.userRole ??
             (response as { role?: string; userRole?: string; roleName?: string } | undefined)?.roleName ??
             '',
-        ).trim().toLowerCase();
+        )
+          .trim()
+          .toLowerCase()
+          .replace(/^role[_\s-]?/, '');
 
-        this.isUserRole = role === 'user' || role === 'customer' || (!role && trimmedUsername.toLowerCase() !== 'admin');
+        if (['admin', 'administrator'].includes(role) || trimmedUsername.toLowerCase() === 'admin') {
+          this.loginError = 'Administrator accounts must sign in at the admin login page.';
+          return;
+        }
+
+        if (role && !['user', 'customer'].includes(role)) {
+          this.loginError = 'This account is not authorized for user sign in.';
+          return;
+        }
+
         this.isLoggedIn = true;
-        this.saveSession(trimmedUsername, this.isUserRole ? 'user' : 'admin');
+        this.saveSession(trimmedUsername, 'user');
         this.loginSuccess.emit();
 
-        this.router.navigate([this.isUserRole ? '/cart' : '/dashboard']);
+        this.router.navigate(['/cart']);
       },
       error: () => {
         this.loginError = 'Invalid username or password.';
@@ -74,7 +78,18 @@ export class Signin {
   }
 
   continueShopping(): void {
-    this.router.navigate([this.isUserRole ? '/cart' : '/dashboard']);
+    this.router.navigate(['/cart']);
+  }
+
+  useAnotherAccount(): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(SESSION_KEY);
+    }
+
+    this.username = '';
+    this.password = '';
+    this.loginError = '';
+    this.isLoggedIn = false;
   }
 
   goToRegister(): void {

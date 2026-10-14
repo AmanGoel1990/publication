@@ -7,7 +7,7 @@
       <form class="auth-form" (ngSubmit)="submitLogin()">
         <label>
           <span>Username</span>
-          <input type="text" [(ngModel)]="username" name="username" placeholder="admin" required />
+          <input type="text" [(ngModel)]="username" name="username" placeholder="username" required />
         </label>
 
         <label>
@@ -35,6 +35,7 @@
       <h2>Welcome, {{ username }}!</h2>
       <p>Your login was successful. You can continue shopping.</p>
       <button type="button" class="primary-btn" (click)="continueShopping()">Continue</button>
+      <button type="button" class="link-btn" (click)="useAnotherAccount()">Sign in as another user</button>
     </div>
   }
 </section>

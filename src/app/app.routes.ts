@@ -8,6 +8,7 @@ import { Contact } from './contact/contact';
 import { Cart } from './cart/cart';
 import { About } from './about/about';
 import { BookDetail  } from './book-detail/book-detail';
+import { Admin } from './admin/admin';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'cart', component: Cart },
     { path: 'publication', component: Publication },
     { path: 'about', component: About },
+    { path: 'admin', component: Admin },
     { path: 'signin', component: Signin },
     { path: 'register', component: Register },
     // { path: 'contact', loadComponent: () => import('./contact/contact').then((module) => module.Contact) },

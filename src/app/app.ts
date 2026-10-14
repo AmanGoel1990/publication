@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Menu } from './menu/menu';
@@ -16,12 +16,24 @@ const LAST_PAGE_KEY = 'mdniy-last-page';
   styleUrl: './app.css'
 })
 export class App {
+  readonly isAdminArea = signal(false);
+
   constructor(private router: Router) {
+    this.isAdminArea.set(this.matchesAdminArea(this.router.url));
+
     this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd && typeof localStorage !== 'undefined') {
-        localStorage.setItem(LAST_PAGE_KEY, event.urlAfterRedirects || '/');
+      if (event instanceof NavigationEnd) {
+        this.isAdminArea.set(this.matchesAdminArea(event.urlAfterRedirects));
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem(LAST_PAGE_KEY, event.urlAfterRedirects || '/');
+        }
       }
     });
+  }
+
+  private matchesAdminArea(url: string): boolean {
+    const path = url.split(/[?#]/, 1)[0].replace(/\/+$/, '');
+    return path === '/admin' || path === '/dashboard';
   }
   // readonly portals = [
   //   { name: 'CCRAS', url: 'https://ccras.nic.in/' },
