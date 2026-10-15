@@ -1,5 +1,7 @@
 .contact-section {
   padding: 2rem 1rem 3rem;
+  /* max-width: 1780px; */
+  width: min(1780px, calc(100% - 32px));
 }
 
 .contact-card {
