@@ -103,11 +103,12 @@
   /* margin: 18px auto 0; */
   padding: 16px max(22px, calc((100% - 1280px) / 2 + 22px));
   /* background: linear-gradient(135deg, #0d5b45 0%, #0d774d 52%, #e9bb4a 100%); */
-  background: linear-gradient(270deg, rgb(216 109 1) 0%, rgb(207 15 100) 100%);
+  /* background: linear-gradient(270deg, rgb(216 109 1) 0%, rgb(207 15 100) 100%); */
+  background: #f5f5f3;
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid #e5e5e2;
   border-radius: 0;
-  box-shadow: 0 18px 40px rgba(13, 52, 43, 0.22);
+  box-shadow: 0 8px 24px rgba(20, 30, 25, 0.1);
 }
 
 .brand {
@@ -115,6 +116,7 @@
   align-items: center;
   gap: 12px;
   min-width: 180px;
+  color:black;
 }
 
 .logo-link {
@@ -129,7 +131,7 @@
   height: 58px;
   object-fit: contain;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.8);
   padding: 4px;
 }
 
@@ -143,12 +145,12 @@
   font-size: 1.02rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #f7f3ea;
+  color: #171717;
 }
 
 .brand-copy span {
   font-size: 0.74rem;
-  color: rgba(246, 241, 233, 0.78);
+  color: #555;
   letter-spacing: 0.04em;
 }
 
@@ -162,7 +164,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.85);
+  color: #000;
   transition: all 0.25s ease;
 }
 
@@ -179,7 +181,7 @@
 }
 
 .main-nav a:hover {
-  color: #f5d77b;
+  color: #000;
 }
 
 .main-nav a::after {
@@ -221,9 +223,9 @@
   align-items: center;
   justify-content: center;
   height: 42px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);
-  color: #f7f3ea;
+  border: 1px solid #d6d6d2;
+  background: #fff;
+  color: #171717;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
@@ -320,9 +322,9 @@
   align-items: center;
   gap: 8px;
   padding: 0.8rem 1.2rem;
-  border: 1px solid rgba(245, 215, 123, 0.6);
-  background: rgba(255, 255, 255, 0.08);
-  color: #f7f3ea;
+  border: 1px solid #d6d6d2;
+  background: #fff;
+  color: #171717;
   cursor: pointer;
 }
 
@@ -595,8 +597,8 @@
     gap: 8px 16px;
     padding: 10px 12px;
     border-radius: 14px;
-    background: rgba(11, 29, 23, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid #e5e5e2;
     opacity: 1;
     max-height: none;
   }
