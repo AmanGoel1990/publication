@@ -5,6 +5,29 @@
 
     <main class="content-wrap">
       <section class="hero">
+        <h2>Top-Selling Books from Our Publications</h2>
+        <div class="hero-cover-viewport" role="region" aria-label="Publication cover gallery" tabindex="0">
+          <div class="hero-cover-track">
+            <div class="hero-cover-set">
+              @for (cover of bookCovers; track cover.image) {
+                <figure class="hero-cover">
+                  <img [src]="cover.image" [alt]="cover.title" />
+                  <figcaption>{{ cover.title }}</figcaption>
+                </figure>
+              }
+            </div>
+            <div class="hero-cover-set" aria-hidden="true">
+              @for (cover of bookCovers; track cover.image) {
+                <figure class="hero-cover">
+                  <img [src]="cover.image" alt="" />
+                  <figcaption>{{ cover.title }}</figcaption>
+                </figure>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- <section class="hero">
         <div class="hero-copy">
           <span class="eyebrow">Morarji Desai National Institute of Yoga</span>
           <h1>Ancient wisdom, modern access.</h1>
@@ -22,7 +45,7 @@
             <li><strong>100%</strong><span>research-driven</span></li>
             <li><strong>Free</strong><span>shipping in India</span></li>
           </ul>
-        </div>
+        </div> -->
 
         <!-- <div class="hero-visual" aria-label="Featured publications preview">
           <div class="book-card card-main">
@@ -39,11 +62,11 @@
           </div>
           <div class="badge-pill">Top Selling</div>
         </div> -->
-      </section>
+      <!-- </section> -->
 
       <section id="featured-books" class="featured-section">
         <div class="section-heading">
-          <p class="eyebrow dark">Top-Selling Books from Our Publications</p>
+          <!-- <p class="eyebrow dark">Top-Selling Books from Our Publications</p> -->
           <h2>Trusted titles for students, clinicians, and researchers.</h2>
         </div>
 

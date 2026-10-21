@@ -21,6 +21,18 @@ type Book = {
   styleUrl: './home.css',
 })
 export class Home {
+  readonly bookCovers = [
+    { title: 'Yogasana - English', image: '/bookscover/Yogasana Cover English 2025.jpg.jpeg' },
+    { title: 'Yogasana - Hindi', image: '/bookscover/Yogasana Cover Hindi 2025.jpg.jpeg' },
+    { title: 'Pranayama - English', image: '/bookscover/Pranayama Cover English 2025.jpg.jpeg' },
+    { title: 'Pranayama - Hindi', image: '/bookscover/Pranayama Cover Hindi 2025.jpg.jpeg' },
+    { title: 'Shatkarma - English', image: '/bookscover/Shatkarma Cover English 2025 Final.jpg.jpeg' },
+    { title: 'Shatkarma - Hindi', image: '/bookscover/Shakarma Cover Hindi 2025 Final.jpg.jpeg' },
+    { title: 'Sukshmayam', image: '/bookscover/Sukshmayam 5.5 X 8.5 FINAL.jpg.jpeg' },
+    { title: 'Yoga Sutra Parichay', image: '/bookscover/Yoga Sutra Parocay.jpg.jpeg' },
+    { title: 'Yoga Vijnana', image: '/bookscover/Yoga Vijnana.jpg.jpeg' },
+    { title: 'How to Manage Stress Through Yoga', image: '/bookscover/HOW TO MANAGE STRESS THROUGH.jpg.jpeg' },
+  ];
   featuredBooks: Book[] = [];
   isLoading = true;
   hasLoadError = false;
