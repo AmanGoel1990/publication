@@ -9,16 +9,23 @@
         <div class="hero-cover-viewport" role="region" aria-label="Publication cover gallery" tabindex="0">
           <div class="hero-cover-track">
             <div class="hero-cover-set">
-              @for (cover of bookCovers; track cover.image) {
+              @for (cover of bookCovers; track cover.image; let i = $index) {
                 <figure class="hero-cover">
-                  <img [src]="cover.image" [alt]="cover.title" />
-                  <figcaption>{{ cover.title }}</figcaption>
+                  <button
+                    type="button"
+                    class="hero-cover-trigger"
+                    [attr.aria-label]="'Preview ' + cover.title"
+                    (click)="openCoverPreview(i)"
+                  >
+                    <img [src]="cover.image" [alt]="cover.title" />
+                    <span>{{ cover.title }}</span>
+                  </button>
                 </figure>
               }
             </div>
             <div class="hero-cover-set" aria-hidden="true">
-              @for (cover of bookCovers; track cover.image) {
-                <figure class="hero-cover">
+              @for (cover of bookCovers; track cover.image; let i = $index) {
+                <figure class="hero-cover" (click)="openCoverPreview(i)">
                   <img [src]="cover.image" alt="" />
                   <figcaption>{{ cover.title }}</figcaption>
                 </figure>
@@ -26,6 +33,43 @@
             </div>
           </div>
         </div>
+        @if (selectedCoverIndex !== null) {
+          <div class="cover-preview-backdrop" (click)="closeCoverPreview()">
+            <section
+              class="cover-preview-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Book cover preview"
+              (click)="$event.stopPropagation()"
+            >
+              <button
+                type="button"
+                class="cover-preview-close"
+                aria-label="Close cover preview"
+                (click)="closeCoverPreview()"
+              >×</button>
+              <button
+                type="button"
+                class="cover-preview-arrow cover-preview-previous"
+                aria-label="Previous book cover"
+                (click)="showPreviousCover()"
+              >‹</button>
+              <div class="cover-preview-content">
+                <img
+                  [src]="bookCovers[selectedCoverIndex].image"
+                  [alt]="bookCovers[selectedCoverIndex].title"
+                />
+                <h3>{{ bookCovers[selectedCoverIndex].title }}</h3>
+              </div>
+              <button
+                type="button"
+                class="cover-preview-arrow cover-preview-next"
+                aria-label="Next book cover"
+                (click)="showNextCover()"
+              >›</button>
+            </section>
+          </div>
+        }
       </section>
       <!-- <section class="hero">
         <div class="hero-copy">

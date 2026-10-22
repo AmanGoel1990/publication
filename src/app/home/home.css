@@ -188,6 +188,19 @@ button:hover {
   text-align: center;
 }
 
+.hero-cover-trigger {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  text-align: center;
+}
+
 .hero-cover img {
   width: 100%;
   aspect-ratio: 0.72;
@@ -197,12 +210,22 @@ button:hover {
   object-fit: contain;
 }
 
+.hero-cover-trigger span,
 .hero-cover figcaption {
   margin-top: 12px;
   color: var(--text);
   font-size: 0.88rem;
   font-weight: 600;
   line-height: 1.4;
+}
+
+.hero-cover-trigger:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+}
+
+.hero-cover-set[aria-hidden='true'] .hero-cover {
+  cursor: pointer;
 }
 
 .hero-cover-viewport:focus-visible {
@@ -234,6 +257,101 @@ button:hover {
   .hero-cover-viewport {
     overflow-x: auto;
   }
+}
+
+.cover-preview-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 20, 18, 0.78);
+}
+
+.cover-preview-dialog {
+  position: relative;
+  display: block;
+  width: min(900px, 100%);
+  max-height: calc(100vh - 48px);
+  padding: 48px 76px 28px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+}
+
+.cover-preview-content {
+  min-width: 0;
+  text-align: center;
+}
+
+.cover-preview-content img {
+  display: block;
+  width: auto;
+  max-width: min(100%, 460px);
+  height: min(68vh, 620px);
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.cover-preview-content h3 {
+  margin: 16px 0 4px;
+  color: var(--text);
+}
+
+.cover-preview-content p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.cover-preview-content .cover-preview-counter {
+  display: table;
+  margin: 12px auto 0;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.cover-preview-dialog button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.cover-preview-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  color: var(--text);
+}
+
+.cover-preview-arrow {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.cover-preview-previous {
+  left: 16px;
+}
+
+.cover-preview-next {
+  right: 16px;
+}
+
+.cover-preview-dialog .cover-preview-arrow:hover {
+  transform: translateY(-50%);
 }
 
 .eyebrow {
@@ -646,6 +764,32 @@ button {
 
   .hero-cover {
     flex-basis: clamp(140px, 42vw, 200px);
+  }
+
+  .cover-preview-backdrop {
+    padding: 14px;
+  }
+
+  .cover-preview-dialog {
+    padding: 52px 48px 20px;
+  }
+
+  .cover-preview-content img {
+    max-width: 100%;
+    height: min(62vh, 520px);
+  }
+
+  .cover-preview-dialog button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .cover-preview-previous {
+    left: 6px;
+  }
+
+  .cover-preview-next {
+    right: 6px;
   }
 
   .hero-copy h1 {
