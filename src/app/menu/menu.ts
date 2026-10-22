@@ -15,7 +15,8 @@ export class Menu {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   // readonly navItems = ['Home', 'Publications', 'Special Offers', 'About MDNIY', 'Contact'];
-  readonly navItems = ['Home', 'Publications', 'About', 'Contact'];
+  // readonly navItems = ['Home', 'Publications', 'About', 'Contact'];
+  readonly navItems = ['Home', 'About', 'Shop', 'Login/Register', 'Contact', 'Help'];
   isCartOpen = false;
   isUserMenuOpen = false;
   isMenuOpen = true;
@@ -128,7 +129,7 @@ export class Menu {
       return;
     }
 
-    if (item === 'Publications') {
+    if (item === 'Shop') {
       this.router.navigate(['/publication']);
     }
     if (item === 'About') {
@@ -136,6 +137,9 @@ export class Menu {
     }
     if (item === 'Contact') {
       this.router.navigate(['/contact']);
+    }
+    if (item === 'Login/Register') {
+      this.router.navigate(['/signin']);
     }
   }
 
