@@ -1,143 +1,162 @@
 <div class="page-shell">
-  <!-- @if (showSignin) {
-    <app-signin></app-signin>
-  } @else { -->
-
-    <main class="content-wrap">
-      <section class="hero">
-        <h2>Top-Selling Books from Our Publications</h2>
-        <div class="hero-cover-viewport" role="region" aria-label="Publication cover gallery" tabindex="0">
-          <div class="hero-cover-track">
-            <div class="hero-cover-set">
-              @for (cover of bookCovers; track cover.image; let i = $index) {
-                <figure class="hero-cover">
-                  <button
-                    type="button"
-                    class="hero-cover-trigger"
-                    [attr.aria-label]="'Preview ' + cover.title"
-                    (click)="openCoverPreview(i)"
-                  >
-                    <img [src]="cover.image" [alt]="cover.title" />
-                    <span>{{ cover.title }}</span>
-                  </button>
-                </figure>
-              }
-            </div>
-            <div class="hero-cover-set" aria-hidden="true">
-              @for (cover of bookCovers; track cover.image; let i = $index) {
-                <figure class="hero-cover" (click)="openCoverPreview(i)">
-                  <img [src]="cover.image" alt="" />
-                  <figcaption>{{ cover.title }}</figcaption>
-                </figure>
-              }
-            </div>
+  <main class="content-wrap">
+    <section class="hero">
+      <h2>Top-Selling Books from Our Publications</h2>
+      <div class="hero-cover-viewport" role="region" aria-label="Publication cover gallery" tabindex="0">
+        <div class="hero-cover-track">
+          <div class="hero-cover-set">
+            @for (cover of bookCovers; track cover.image; let i = $index) {
+              <figure class="hero-cover">
+                <button
+                  type="button"
+                  class="hero-cover-trigger"
+                  [attr.aria-label]="'Preview ' + cover.title"
+                  (click)="openCoverPreview(i)"
+                >
+                  <img [src]="cover.image" [alt]="cover.title" />
+                  <span>{{ cover.title }}</span>
+                </button>
+              </figure>
+            }
+          </div>
+          <div class="hero-cover-set" aria-hidden="true">
+            @for (cover of bookCovers; track cover.image) {
+              <figure class="hero-cover">
+                <img [src]="cover.image" alt="" />
+                <figcaption>{{ cover.title }}</figcaption>
+              </figure>
+            }
           </div>
         </div>
-        @if (selectedCoverIndex !== null) {
-          <div class="cover-preview-backdrop" (click)="closeCoverPreview()">
-            <section
-              class="cover-preview-dialog"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Book cover preview"
-              (click)="$event.stopPropagation()"
+      </div>
+
+      @if (selectedCoverIndex !== null) {
+        <div class="cover-preview-backdrop" (click)="closeCoverPreview()">
+          <section
+            class="cover-preview-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Book cover preview"
+            (click)="$event.stopPropagation()"
+          >
+            <button
+              type="button"
+              class="cover-preview-close"
+              aria-label="Close cover preview"
+              (click)="closeCoverPreview()"
+            >×</button>
+            <button
+              type="button"
+              class="cover-preview-arrow cover-preview-previous"
+              aria-label="Previous book cover"
+              (click)="showPreviousCover()"
+            >‹</button>
+            <div class="cover-preview-content">
+              <img
+                [src]="bookCovers[selectedCoverIndex].image"
+                [alt]="bookCovers[selectedCoverIndex].title"
+              />
+              <h3>{{ bookCovers[selectedCoverIndex].title }}</h3>
+            </div>
+            <button
+              type="button"
+              class="cover-preview-arrow cover-preview-next"
+              aria-label="Next book cover"
+              (click)="showNextCover()"
+            >›</button>
+          </section>
+        </div>
+      }
+    </section>
+
+    <section class="featured-publications" aria-label="Featured publications">
+      <article class="featured-publication">
+        <a
+          class="featured-publication-cover"
+          href="https://publication.ccras.res.in/product/marmacikitsa-basic-tenets-in-ayurveda-and-therapeutic-approaches-second-edition/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://publication.ccras.res.in/wp-content/uploads/2025/06/Marmacikitsa-Basic-Tenets-in-Ayurveda-and-Therapeutic-Approaches-Second-Edition.jpg"
+            alt="Marmacikitsa: Basic Tenets in Ayurveda and Therapeutic Approaches, Second Edition"
+            loading="lazy"
+          />
+        </a>
+        <div class="featured-publication-copy">
+          <h2>
+            <a
+              href="https://publication.ccras.res.in/product/marmacikitsa-basic-tenets-in-ayurveda-and-therapeutic-approaches-second-edition/"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <button
-                type="button"
-                class="cover-preview-close"
-                aria-label="Close cover preview"
-                (click)="closeCoverPreview()"
-              >×</button>
-              <button
-                type="button"
-                class="cover-preview-arrow cover-preview-previous"
-                aria-label="Previous book cover"
-                (click)="showPreviousCover()"
-              >‹</button>
-              <div class="cover-preview-content">
-                <img
-                  [src]="bookCovers[selectedCoverIndex].image"
-                  [alt]="bookCovers[selectedCoverIndex].title"
-                />
-                <h3>{{ bookCovers[selectedCoverIndex].title }}</h3>
-              </div>
-              <button
-                type="button"
-                class="cover-preview-arrow cover-preview-next"
-                aria-label="Next book cover"
-                (click)="showNextCover()"
-              >›</button>
-            </section>
-          </div>
-        }
-      </section>
-      <!-- <section class="hero">
-        <div class="hero-copy">
-          <span class="eyebrow">Morarji Desai National Institute of Yoga</span>
-          <h1>Ancient wisdom, modern access.</h1>
+              Marmacikitsa- Basic Tenets in Ayurveda and Therapeutic Approaches -Second Edition
+            </a>
+          </h2>
           <p>
-            Browse curated publications in Yoga, Pranayama, Meditation, Indian Knowledge System, Clinical Research, and Traditional Medicinal Sciences.
+            Marmacikitsa is one among the various ancient Indian traditions which can be of great benefit to mankind. It is based on deep understanding of the design and working of the human body which utilizes various points or areas of the body for preventive and therapeutic health benefits using various manipulative techniques to complex procedures. Marma, by definition are the various seats or specific locations of Prana (life force) in the body. This knowledge was as ancient as the Vedic literature and all the major compendiums of Ayurveda &amp; the various ancient literature of ancient India such as the Mahabharata have numerous references of marma. The knowledge of marma was kept highly secretive owing to its ability to do harm to any individual if wrongly practiced or used for willful infliction of injury to opponents and was thus transferred from a learned master to a well-tested disciple after a rigorous course of study for long duration under him in a phased manner in order to prevent this science from going into wrong hands. This secretive nature is one of the reasons which lead to the gradual diminution of this branch of knowledge from the general healing practices. But even now, there are selected few individuals who are well versed of this ancient art and keeping the tradition alive and also propagating this ancient knowledge. This book is the outcome of such an initiative of the Central Council for Research in Ayurvedic Sciences where such knowledge, both theoretical and applied were documented from various experts of Marmacikitsa and compiled so as to preserve this knowledge for future generations and bring it to the mainstream of Ayurveda clinical practice.
           </p>
-
-          <div class="cta-row">
-            <a class="primary-btn" href="#featured-books">Explore Books</a>
-            <a class="secondary-btn" href="#contact">Contact Us</a>
-          </div>
-
-          <ul class="hero-meta" aria-label="Key site metrics">
-            <li><strong>40+</strong><span>titles</span></li>
-            <li><strong>100%</strong><span>research-driven</span></li>
-            <li><strong>Free</strong><span>shipping in India</span></li>
-          </ul>
-        </div> -->
-
-        <!-- <div class="hero-visual" aria-label="Featured publications preview">
-          <div class="book-card card-main">
-            <img
-              src="https://www.yogamdniy.nic.in/uploads/YogaforMentalHealth.jpg"
-              alt="Yoga For Mental Health"
-            />
-          </div>
-          <div class="book-card card-back">
-            <img
-              src="https://www.yogamdniy.nic.in/uploads/bookcover/Consumer-Information-on-Proper-Use-of-Yoga.jpg"
-              alt="Consumer Information on Proper Use of Yoga"
-            />
-          </div>
-          <div class="badge-pill">Top Selling</div>
-        </div> -->
-      <!-- </section> -->
-
-      <section id="featured-books" class="featured-section">
-        <div class="section-heading">
-          <!-- <p class="eyebrow dark">Top-Selling Books from Our Publications</p> -->
-          <h2>Trusted titles for students, clinicians, and researchers.</h2>
         </div>
+      </article>
 
-        @if (isLoading) {
-          <p class="books-status" role="status">Loading publications...</p>
-        } @else if (hasLoadError) {
-          <p class="books-status" role="alert">Publications could not be loaded. Please try again shortly.</p>
-        } @else if (featuredBooks.length === 0) {
-          <p class="books-status">No publications are available yet.</p>
-        } @else {
-          <div class="book-grid">
-            <!-- @for (book of featuredBooks; track book.title) { -->
-             @for (book of featuredBooks; track book.id) {
-              <article class="book-item">
-                <!-- <article
-                class="book-item"
-                tabindex="0"
+      <article class="featured-publication featured-publication-reversed">
+        <div class="featured-publication-copy">
+          <h2>
+            <a
+              href="https://publication.ccras.res.in/product/a-practical-handbook-of-panchakarma-procedures-e/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              A Practical Handbook of Panchakarma Procedures (E)
+            </a>
+          </h2>
+          <p>
+            This book deals with the commonly practiced, popular Panchakarma procedures minutely in simplified form for the benefit of students and Ayurvedic practitioners. It has been tried to give the material requirements, name and doses of commonly used medicines with administration time, indications and contraindications with necessary photographs. The assessment of minimum required manpower in various procedures has also been done. This book also recommends space and staff requirements for a model Panchakarma unit. Textual references are also given wherever possible.
+          </p>
+        </div>
+        <a
+          class="featured-publication-cover"
+          href="https://publication.ccras.res.in/product/a-practical-handbook-of-panchakarma-procedures-e/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://publication.ccras.res.in/wp-content/uploads/2025/05/A-Practical-Handbook-of-Panchakarma-Procedures-E.jpg"
+            alt="A Practical Handbook of Panchakarma Procedures (English)"
+            loading="lazy"
+          />
+        </a>
+      </article>
+    </section>
+
+    <section id="featured-books" class="featured-section">
+      <div class="section-heading">
+        <h2>Trusted titles for students, clinicians, and researchers.</h2>
+      </div>
+
+      @if (isLoading) {
+        <p class="books-status" role="status">Loading publications...</p>
+      } @else if (hasLoadError) {
+        <p class="books-status" role="alert">Publications could not be loaded. Please try again shortly.</p>
+      } @else if (featuredBooks.length === 0) {
+        <p class="books-status">No publications are available yet.</p>
+      } @else {
+        <div class="book-grid">
+          @for (book of featuredBooks; track book.id) {
+            <article class="book-item">
+              <button
+                type="button"
+                class="book-cover clickable-cover"
+                [style.border-color]="book.accent"
+                [attr.aria-label]="'View details for ' + book.title"
                 (click)="openBookDetails(book)"
-                (keydown.enter)="openBookDetails(book)"
-              > -->
-              <div class="book-cover clickable-cover" [style.border-color]="book.accent" role="button" tabindex="0" (click)="openBookDetails(book)" (keydown.enter)="openBookDetails(book)" (keydown.space)="openBookDetails(book); $event.preventDefault()" >
+              >
                 @if (book.pdf) {
                   <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
                 } @else {
                   <img [src]="book.image" [alt]="book.title" />
                 }
-              </div>
+              </button>
               <div class="book-info">
                 <span class="book-tag" [style.background]="book.accent">Popular</span>
                 <h3>{{ book.title }}</h3>
@@ -146,11 +165,19 @@
                   <strong>Choose a format</strong>
                 </div>
                 <div class="format-options" aria-label="Book formats">
-                  <button type="button" class="format-option hardcopy-option" (click)="addToCart({ title: book.title, price: book.hardcopyPrice, format: 'Hardcopy' })">
+                  <button
+                    type="button"
+                    class="format-option hardcopy-option"
+                    (click)="addToCart({ title: book.title, price: book.hardcopyPrice, format: 'Hardcopy' })"
+                  >
                     Hardcopy · {{ book.hardcopyPrice }} · Add to cart
                   </button>
                   @if (book.pdf) {
-                    <button type="button" class="format-option ebook-option" (click)="addToCart({ title: book.title, price: book.ebookPrice, format: 'E-book' })">
+                    <button
+                      type="button"
+                      class="format-option ebook-option"
+                      (click)="addToCart({ title: book.title, price: book.ebookPrice, format: 'E-book' })"
+                    >
                       E-book · {{ book.ebookPrice }} · Add to cart
                     </button>
                   } @else {
@@ -160,27 +187,25 @@
                   }
                 </div>
               </div>
-              </article>
-            }
-          </div>
-        }
-      </section>
+            </article>
+          }
+        </div>
+      }
+    </section>
 
-      <section class="benefits-strip" aria-label="Why trust us">
-        <article>
-          <span>Free Shipping</span>
-          <h3>No shipping charges—anywhere in India.</h3>
-        </article>
-        <article>
-          <span>No Return or Refund Policy</span>
-          <h3>All sales are final.</h3>
-        </article>
-        <article>
-          <span>Secure Payment</span>
-          <h3>Encrypted payment gateways for safe transactions.</h3>
-        </article>
-      </section>
-    </main>
-
-  <!-- } -->
+    <section class="benefits-strip" aria-label="Why trust us">
+      <article>
+        <span>Free Shipping</span>
+        <h3>No shipping charges—anywhere in India.</h3>
+      </article>
+      <article>
+        <span>No Return or Refund Policy</span>
+        <h3>All sales are final.</h3>
+      </article>
+      <article>
+        <span>Secure Payment</span>
+        <h3>Encrypted payment gateways for safe transactions.</h3>
+      </article>
+    </section>
+  </main>
 </div>

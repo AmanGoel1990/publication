@@ -683,6 +683,76 @@ button {
   color: rgba(255,255,255,0.9);
 }
 
+.featured-publications {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(42px, 5.5vw, 76px);
+  width: calc(100% + 64px);
+  margin: 0 -32px;
+  padding: clamp(48px, 6vw, 84px) clamp(32px, 7vw, 106px);
+  background: #e7f5fc;
+}
+
+.featured-publication {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(44px, 8vw, 124px);
+  width: min(100%, 1320px);
+  margin: 0 auto;
+}
+
+.featured-publication-reversed {
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+}
+
+.featured-publication-cover {
+  display: flex;
+  width: 100%;
+  max-width: 445px;
+  aspect-ratio: 0.74;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+}
+
+.featured-publication-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.featured-publication-copy h2 {
+  margin: 0 0 30px;
+  color: #172331;
+  font-size: clamp(1.8rem, 2.45vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.38;
+}
+
+.featured-publication-copy h2 a {
+  color: inherit;
+}
+
+.featured-publication-copy h2 a:hover {
+  color: #254f77;
+}
+
+.featured-publication-copy p {
+  margin: 0;
+  color: #3f5268;
+  font-size: 1.02rem;
+  line-height: 1.62;
+  text-align: justify;
+}
+
+.featured-publication-cover:focus-visible,
+.featured-publication-copy h2 a:focus-visible {
+  outline: 3px solid #315c83;
+  outline-offset: 5px;
+}
+
 .directions-link {
   display: inline-block;
   margin-top: 4px;
@@ -721,6 +791,16 @@ button {
     grid-template-columns: 1fr;
   }
 
+  .featured-publications {
+    width: calc(100% + 64px);
+    gap: 42px;
+    padding: 42px 32px;
+  }
+
+  .featured-publication {
+    gap: 30px;
+  }
+
   .hero-cover {
     flex-basis: clamp(150px, 27vw, 220px);
   }
@@ -755,6 +835,33 @@ button {
 
   .hero {
     padding: 22px 16px;
+  }
+
+  .featured-publications {
+    width: calc(100% + 28px);
+    gap: 38px;
+    margin: 0 -14px;
+    padding: 32px 20px;
+  }
+
+  .featured-publication,
+  .featured-publication-reversed {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .featured-publication-cover {
+    width: min(100%, 300px);
+  }
+
+  .featured-publication-copy h2 {
+    margin-bottom: 20px;
+    font-size: 1.55rem;
+  }
+
+  .featured-publication-copy p {
+    font-size: 0.94rem;
+    text-align: left;
   }
 
   .hero-cover-set {
