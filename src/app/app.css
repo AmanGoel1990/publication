@@ -6,10 +6,10 @@
 	left: 0;
 	margin: 28px auto 18px;
 	padding: 32px max(30px, calc((100% - 1280px) / 2 + 30px));
-	background: center bottom no-repeat rgb(4, 51, 102);
+	background: center bottom no-repeat rgb(251, 251, 252);
 	border-top: 4px solid var(--secondary);
 	border-radius: 28px;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(7, 5, 5, 0.9);
 }
 
 .directions-link {
@@ -26,7 +26,7 @@
 
 .site-footer p,
 .site-footer a {
-	color: rgba(255, 255, 255, 0.8);
+	color: rgba(7, 5, 5, 0.8);
 	line-height: 1.8;
 }
 
