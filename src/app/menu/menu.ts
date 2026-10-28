@@ -16,7 +16,8 @@ export class Menu {
 
   // readonly navItems = ['Home', 'Publications', 'Special Offers', 'About MDNIY', 'Contact'];
   // readonly navItems = ['Home', 'Publications', 'About', 'Contact'];
-  readonly navItems = ['Home', 'About', 'Shop', 'Login/Register', 'Contact', 'Help'];
+  // readonly navItems = ['Home', 'About', 'Shop', 'Login/Register', 'Contact', 'Help'];
+  readonly navItems = ['Home', 'About', 'Shop', 'Login/Register', 'Contact'];
   isCartOpen = false;
   isUserMenuOpen = false;
   isMenuOpen = true;

@@ -51,7 +51,8 @@ export class Home {
           .filter(
             (book) =>
               book.id !== undefined &&
-              book.id !== null
+              book.id !== null &&
+              book.type === 'new'
           ).map((book) => ({
           id: book.id ?? '',
           title: book.title ?? 'Untitled Book',
