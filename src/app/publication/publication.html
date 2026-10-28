@@ -1,7 +1,22 @@
 <main class="publication-page" id="publication-list">
   <header class="publication-header">
     <p class="eyebrow">Publications</p>
-    <h1>Books available in our collection</h1>
+    <!-- <h1>Books available in our collection</h1> -->
+    <div class="book-search" role="search">
+      <!-- <label for="book-search">Search books</label> -->
+      <div class="search-input-row">
+        <input
+          id="book-search"
+          type="search"
+          placeholder="Search by title, author, or description"
+          [value]="searchQuery()"
+          (input)="updateSearch($event)"
+        />
+        @if (searchQuery()) {
+          <button type="button" class="clear-search" (click)="clearSearch()">Clear</button>
+        }
+      </div>
+    </div>
   </header>
 
   @if (isLoading()) {
@@ -9,56 +24,55 @@
   } @else if (hasLoadError()) {
     <p class="catalog-message" role="alert">Books could not be loaded. Please try again later.</p>
   } @else {
-    @for (group of bookGroups(); track group.type) {
-      <section class="publication-section" [attr.aria-label]="group.title">
-        <header class="section-heading">
-          <h2>{{ group.title }}</h2>
-          <span>{{ group.books.length }} titles</span>
-        </header>
+    <section class="publication-section" aria-label="All Books">
+      <header class="section-heading">
+        <h2>All Books</h2>
+        <span>{{ filteredBooks().length }} {{ filteredBooks().length === 1 ? 'title' : 'titles' }}</span>
+      </header>
 
-        @if (group.books.length) {
-          <div class="publication-grid">
-            @for (book of group.books; track book.id ?? book.title) {
-              <article class="publication-card">
-                <div class="publication-cover" [style.border-color]="book.accent">
+      @if (filteredBooks().length) {
+        <div class="publication-grid">
+          @for (book of filteredBooks(); track book.id ?? book.title) {
+            <article class="publication-card">
+              <div class="publication-cover" [style.border-color]="book.accent">
+                @if (book.pdf) {
+                  <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
+                } @else {
+                  <img [src]="book.image" [alt]="book.title" />
+                }
+              </div>
+              <div class="publication-info">
+                <h3>{{ book.title }}</h3>
+                @if (book.author) {
+                  <p class="book-author">{{ book.author }}</p>
+                }
+                <p>{{ book.description }}</p>
+                <div class="price-row">
+                  <strong>Choose a format</strong>
+                </div>
+                <div class="format-options" aria-label="Book formats">
+                  <button type="button" class="format-option hardcopy-option" (click)="addToCart({ title: book.title, price: book.hardcopyPrice, format: 'Hardcopy' })">
+                    Hardcopy · {{ book.hardcopyPrice }} · Add to cart
+                  </button>
                   @if (book.pdf) {
-                    <app-pdf-cover [pdfUrl]="book.pdf" [title]="book.title" />
-                  } @else {
-                    <img [src]="book.image" [alt]="book.title" />
-                  }
-                </div>
-                <div class="publication-info">
-                  <span class="book-type" [class.old-book]="book.type === 'old'" [style.background]="book.type === 'old' ? null : book.accent">{{ book.type === 'old' ? 'Old' : 'New' }}</span>
-                  <h3>{{ book.title }}</h3>
-                  @if (book.author) {
-                    <p class="book-author">{{ book.author }}</p>
-                  }
-                  <p>{{ book.description }}</p>
-                  <div class="price-row">
-                    <strong>Choose a format</strong>
-                  </div>
-                  <div class="format-options" aria-label="Book formats">
-                    <button type="button" class="format-option hardcopy-option" (click)="addToCart({ title: book.title, price: book.hardcopyPrice, format: 'Hardcopy' })">
-                      Hardcopy · {{ book.hardcopyPrice }} · Add to cart
+                    <button type="button" class="format-option ebook-option" (click)="addToCart({ title: book.title, price: book.ebookPrice, format: 'E-book' })">
+                      E-book · {{ book.ebookPrice }} · Add to cart
                     </button>
-                    @if (book.pdf) {
-                      <button type="button" class="format-option ebook-option" (click)="addToCart({ title: book.title, price: book.ebookPrice, format: 'E-book' })">
-                        E-book · {{ book.ebookPrice }} · Add to cart
-                      </button>
-                    } @else {
-                      <button type="button" class="format-option ebook-option" disabled>
-                        E-book · {{ book.ebookPrice }} · unavailable
-                      </button>
-                    }
-                  </div>
+                  } @else {
+                    <button type="button" class="format-option ebook-option" disabled>
+                      E-book · {{ book.ebookPrice }} · unavailable
+                    </button>
+                  }
                 </div>
-              </article>
-            }
-          </div>
-        } @else {
-          <p class="empty-category">No {{ group.title.toLowerCase() }} found.</p>
-        }
-      </section>
-    }
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <p class="empty-category">
+          {{ searchQuery() ? 'No books match your search.' : 'No books found.' }}
+        </p>
+      }
+    </section>
   }
 </main>

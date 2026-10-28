@@ -24,14 +24,21 @@ type PublicationBook = {
   styleUrl: './publication.css',
 })
 export class Publication implements OnInit {
-  readonly newBooks = signal<PublicationBook[]>([]);
-  readonly oldBooks = signal<PublicationBook[]>([]);
+  readonly books = signal<PublicationBook[]>([]);
+  readonly searchQuery = signal('');
   readonly isLoading = signal(true);
   readonly hasLoadError = signal(false);
-  readonly bookGroups = computed(() => [
-    { type: 'new', title: 'New Books', books: this.newBooks() },
-    { type: 'old', title: 'Old Books', books: this.oldBooks() },
-  ]);
+  readonly filteredBooks = computed(() => {
+    const query = this.searchQuery().trim().toLowerCase();
+
+    if (!query) {
+      return this.books();
+    }
+
+    return this.books().filter((book) =>
+      `${book.title} ${book.author} ${book.description}`.toLowerCase().includes(query),
+    );
+  });
 
   constructor(
     private integration: Integration,
@@ -42,12 +49,18 @@ export class Publication implements OnInit {
     this.cartService.addToCart(product);
   }
 
+  updateSearch(event: Event): void {
+    this.searchQuery.set((event.target as HTMLInputElement).value);
+  }
+
+  clearSearch(): void {
+    this.searchQuery.set('');
+  }
+
   ngOnInit(): void {
     this.integration.getBooks().subscribe({
       next: (books) => {
-        const mappedBooks = books.map((book) => this.mapBook(book));
-        this.newBooks.set(mappedBooks.filter((book) => book.type === 'new'));
-        this.oldBooks.set(mappedBooks.filter((book) => book.type === 'old'));
+        this.books.set(books.map((book) => this.mapBook(book)));
         this.isLoading.set(false);
       },
       error: () => {
