@@ -1,21 +1,53 @@
-@if (!isAdminArea()) {
+﻿@if (!isAdminArea()) {
 	<app-menu></app-menu>
 }
 <router-outlet></router-outlet>
 
 @if (!isAdminArea()) {
 	<footer id="contact" class="site-footer">
-		<div class="footer-copy">
-			<h3>Contact MDNIY</h3>
-			<p>68, Ashoka Road, near Gol Dak Khana Roundabout, Pandit Pant Marg Area, New Delhi, Delhi 110001</p>
-			<p>Telephone: <a href="tel:+911123721472">011 2372 1472</a></p>
-			<p>Email: <a href="mailto:dir-mdniy@nic.in">dir-mdniy@nic.in</a></p>
-			<a class="directions-link" href="https://www.google.com/maps/search/?api=1&amp;query=Morarji+Desai+National+Institute+of+Yoga%2C+68+Ashoka+Road%2C+New+Delhi+110001" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+		<div class="footer-main">
+			<div class="footer-column footer-contact">
+				<a class="footer-brand" routerLink="/" aria-label="MDNIY Publications home">
+					<img src="/logo.jpeg" alt="MDNIY logo" />
+					<span><strong>MDNIY</strong><small>Publications</small></span>
+				</a>
+				<h3>Contact Us</h3>
+				<p>Morarji Desai National Institute of Yoga<br />68, Ashoka Road<br />New Delhi - 110001</p>
+				<p><strong>Telephone:</strong> <a href="tel:+911123721472">011 2372 1472</a></p>
+				<p><strong>Email:</strong> <a href="mailto:dir-mdniy@nic.in">dir-mdniy&#64;nic.in</a></p>
+				<a class="directions-link" href="https://www.google.com/maps/search/?api=1&amp;query=Morarji+Desai+National+Institute+of+Yoga%2C+68+Ashoka+Road%2C+New+Delhi+110001" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+			</div>
+
+			<div class="footer-column">
+				<h3>Quick Links</h3>
+				<a routerLink="/">Home</a>
+				<a routerLink="/publication">Publication</a>
+				<a routerLink="/about">About</a>
+				<a routerLink="/contact">Contact</a>
+				<a href="https://yogamdniy.nic.in/" target="_blank" rel="noopener noreferrer">MDNIY Website</a>
+			</div>
+
+			<!-- <div class="footer-column">
+				<h3>Important Links</h3>
+				<a href="https://www.ayush.gov.in/" target="_blank" rel="noopener noreferrer">Ministry of Ayush</a>
+				<a href="https://pgstar2.ccras.org.in/" target="_blank" rel="noopener noreferrer">PG STAR</a>
+				<a href="https://spark.ccras.org.in/" target="_blank" rel="noopener noreferrer">SPARK</a>
+				<a href="https://ccras.nic.in/" target="_blank" rel="noopener noreferrer">CCRAS</a>
+			</div> -->
+
+			<div class="footer-column footer-legal">
+				<h3>Policies</h3>
+				<a href="#">Terms and Conditions</a>
+				<a routerLink="/privacy">Privacy Policy</a>
+				<a href="#">Refund &amp; Return Policy</a>
+			</div>
 		</div>
 
-		<!-- <div class="footer-cta">
-		<h3>Apply for 30% Discount</h3>
-		<a href="#">How to Redeem and Apply the 30% Discount on Book Purchases</a>
-	</div> -->
+		<div class="footer-bottom">
+			<p>&copy; {{ currentYear }} Morarji Desai National Institute of Yoga. All Rights Reserved.</p>
+			@if (showBackToTop()) {
+				<a href="#" class="back-to-top" aria-label="Back to top" (click)="scrollToTop($event)">↑</a>
+			}
+		</div>
 	</footer>
 }
