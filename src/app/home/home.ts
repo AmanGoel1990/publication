@@ -32,6 +32,14 @@ export class Home {
     { title: 'Yoga Vijnana', image: '/bookscover/Yoga Vijnana.jpg.jpeg' },
     { title: 'Shatkarma - Hindi', image: '/bookscover/Shakarma Cover Hindi 2025 Final.jpg.jpeg' },
     { title: 'How to Manage Stress Through Yoga', image: '/bookscover/HOW TO MANAGE STRESS THROUGH.jpg.jpeg' },
+    { title: 'Yoga for Wellness by Ramamani Iyengar Memorial Yoga Institute, Pune', image: '/bookscover/IMG_9122.jpg.jpeg' },
+    { title: 'Yoga for Wellness by Krishnamacharya Yoga Mandiram, Chennai ', image: '/bookscover/IMG_9123.jpg.jpeg' },
+    { title: 'Yoga for Wellness by Isha Yoga Foundation, Coimbatore', image: '/bookscover/IMG_9124.jpg.jpeg' },
+    { title: 'Yoga for Wellness by International Centre for Yoga Education and Research (ICYER), Puducherry', image: '/bookscover/IMG_9125.jpg.jpeg' },
+    { title: 'Yoga for Wellness by Swami Rama Sadhak Gram, Rishikesh ', image: '/bookscover/IMG_9126.jpg.jpeg' },
+    { title: 'Yoga for Holistic Personality Development by Ramamani Iyengar Memorial Yoga Institute, Pune', image: '/bookscover/IMG_9127.jpg.jpeg' },
+    { title: 'Yoga for Holistic Personality Development by The Yoga Institute, Santacruze (East), Mumbai', image: '/bookscover/IMG_9128.jpg.jpeg' },
+    { title: 'A Yogic approach to Holistic Personality Development By Yoganjali Natyalayam, Puduchery', image: '/bookscover/IMG_9130.jpg.jpeg' },
   ];
   featuredBooks: Book[] = [];
   isLoading = true;

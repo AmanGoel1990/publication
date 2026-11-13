@@ -67,15 +67,105 @@
               <p class="eyebrow">Publication catalogue</p>
               <h3 id="books-heading">Books</h3>
             </div>
-            <button type="button" class="add-book-btn" (click)="openNewBookForm()">
+            <button
+              type="button"
+              class="add-book-btn"
+              (click)="openNewBookForm()"
+            >
               <span aria-hidden="true">+</span>
               Add New Book
             </button>
           </header>
 
-          @if (books.length === 0) {
+          @if (isBookFormOpen) {
+            <section class="book-form-panel book-editor-panel" aria-labelledby="book-editor-title">
+              <header class="book-editor-header">
+                <div>
+                  <p class="eyebrow">{{ editingIndex !== null ? 'Edit publication' : 'New publication' }}</p>
+                  <h3 id="book-editor-title">{{ editingIndex !== null ? 'Edit Book' : 'Add New Book' }}</h3>
+                </div>
+                <button
+                  type="button"
+                  class="book-editor-close"
+                  aria-label="Close book form"
+                  [disabled]="uploadingPdf"
+                  (click)="closeBookForm()"
+                >
+                  ×
+                </button>
+              </header>
+
+              <form class="book-form book-editor-form" (ngSubmit)="submitBook()">
+                <label>
+                  <span>Book title</span>
+                  <input type="text" [(ngModel)]="form.title" name="title" placeholder="Enter title" required />
+                </label>
+                <label>
+                  <span>Author</span>
+                  <input type="text" [(ngModel)]="form.author" name="author" placeholder="Enter author name" />
+                </label>
+                <label>
+                  <span>Hard Copy Price</span>
+                  <input type="number" min="0" step="0.01" [(ngModel)]="form.hardcopyprice" name="hardcopyprice" placeholder="500" required />
+                </label>
+                <label>
+                  <span>E-book Price</span>
+                  <input type="number" min="0" step="0.01" [(ngModel)]="form.ebookprice" name="ebookprice" placeholder="250" required />
+                </label>
+                <label class="book-form-full">
+                  <span>Upload Book (PDF)</span>
+                  <input
+                    #bookPdfInput
+                    type="file"
+                    name="bookPdf"
+                    accept="application/pdf,.pdf"
+                    (change)="uploadPdf($event)"
+                    [disabled]="uploadingPdf"
+                  />
+                  @if (pendingPdf) {
+                    <span class="upload-status" role="status">{{ pendingPdf.name }} ready to upload</span>
+                  } @else if (form.pdf) {
+                    <span class="upload-status" role="status">PDF saved in public/books</span>
+                  }
+                  @if (uploadError) {
+                    <span class="upload-error" role="alert">{{ uploadError }}</span>
+                  }
+                </label>
+                <label>
+                  <span>Book type</span>
+                  <select [(ngModel)]="form.type" name="type">
+                    <option value="new">New</option>
+                    <option value="old">Old</option>
+                  </select>
+                </label>
+                <label class="book-form-full">
+                  <span>Description</span>
+                  <textarea [(ngModel)]="form.description" name="description" rows="4" placeholder="Book description"></textarea>
+                </label>
+                <div class="form-actions book-form-full">
+                  <button type="submit" class="save-btn" [disabled]="uploadingPdf">
+                    @if (uploadingPdf) {
+                      <span class="spinner" aria-hidden="true"></span>
+                      Saving...
+                    } @else {
+                      {{ editingIndex !== null ? 'Update Book' : 'Save Book' }}
+                    }
+                  </button>
+                  <button type="button" class="secondary-btn" (click)="closeBookForm()" [disabled]="uploadingPdf">
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </section>
+          }
+
+          @if (saveSuccess) {
+            <div class="save-success books-save-success" role="status">{{ saveSuccess }}</div>
+          }
+
+          @if (books.length === 0 && !isBookFormOpen) {
             <p class="books-empty">No books found. Select “Add New Book” to add a publication.</p>
-          } @else {
+          } @else if (books.length > 0) {
             <div class="books-table-wrap">
               <table class="books-table">
                 <thead>
@@ -98,7 +188,13 @@
                       <td><span class="table-book-type">{{ book.type === 'new' ? 'New' : 'Old' }}</span></td>
                       <td>
                         <div class="table-actions">
-                          <button type="button" class="table-edit-btn" (click)="editBook($index)">Edit</button>
+                          <button
+                            type="button"
+                            class="table-edit-btn"
+                            (click)="editBook($index)"
+                          >
+                            Edit
+                          </button>
                           <button type="button" class="table-delete-btn" (click)="deleteBook($index)">Delete</button>
                         </div>
                       </td>
@@ -153,99 +249,6 @@
       }
     </main>
   </div>
-
-  @if (isBookFormOpen) {
-    <div class="dashboard-modal-backdrop" (click)="closeBookForm()">
-      <section
-        class="dashboard-modal book-editor-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="book-editor-title"
-        (click)="$event.stopPropagation()"
-      >
-        <header class="book-editor-header">
-          <div>
-            <p class="dashboard-modal-eyebrow">{{ editingIndex !== null ? 'Edit publication' : 'New publication' }}</p>
-            <h3 id="book-editor-title">{{ editingIndex !== null ? 'Edit Book' : 'Add New Book' }}</h3>
-          </div>
-          <button
-            type="button"
-            class="book-editor-close"
-            aria-label="Close book form"
-            [disabled]="uploadingPdf"
-            (click)="closeBookForm()"
-          >
-            ×
-          </button>
-        </header>
-
-        <form class="book-form book-editor-form" (ngSubmit)="submitBook()">
-          <label>
-            <span>Book title</span>
-            <input type="text" [(ngModel)]="form.title" name="title" placeholder="Enter title" required />
-          </label>
-          <label>
-            <span>Author</span>
-            <input type="text" [(ngModel)]="form.author" name="author" placeholder="Enter author name" />
-          </label>
-          <label>
-            <span>Hard Copy Price</span>
-            <input type="number" min="0" step="0.01" [(ngModel)]="form.hardcopyprice" name="hardcopyprice" placeholder="500" required />
-          </label>
-          <label>
-            <span>E-book Price</span>
-            <input type="number" min="0" step="0.01" [(ngModel)]="form.ebookprice" name="ebookprice" placeholder="250" required />
-          </label>
-          <label class="book-form-full">
-            <span>Upload Book (PDF)</span>
-            <input
-              #bookPdfInput
-              type="file"
-              name="bookPdf"
-              accept="application/pdf,.pdf"
-              (change)="uploadPdf($event)"
-              [disabled]="uploadingPdf"
-            />
-            @if (pendingPdf) {
-              <span class="upload-status" role="status">{{ pendingPdf.name }} ready to upload</span>
-            } @else if (form.pdf) {
-              <span class="upload-status" role="status">PDF saved in public/books</span>
-            }
-            @if (uploadError) {
-              <span class="upload-error" role="alert">{{ uploadError }}</span>
-            }
-          </label>
-          <label>
-            <span>Book type</span>
-            <select [(ngModel)]="form.type" name="type">
-              <option value="new">New</option>
-              <option value="old">Old</option>
-            </select>
-          </label>
-          <label class="book-form-full">
-            <span>Description</span>
-            <textarea [(ngModel)]="form.description" name="description" rows="4" placeholder="Book description"></textarea>
-          </label>
-          @if (saveSuccess) {
-            <div class="save-success book-form-full" role="status">{{ saveSuccess }}</div>
-          }
-          <div class="form-actions book-form-full">
-            <button type="submit" class="save-btn" [disabled]="uploadingPdf">
-              @if (uploadingPdf) {
-                <span class="spinner" aria-hidden="true"></span>
-                Saving...
-              } @else {
-                {{ editingIndex !== null ? 'Update Book' : 'Save Book' }}
-              }
-            </button>
-            <button type="button" class="secondary-btn" (click)="closeBookForm()" [disabled]="uploadingPdf">
-              Cancel
-            </button>
-          </div>
-        </form>
-      </section>
-    </div>
-  }
 
   @if (uploadingPdf) {
     <div class="dashboard-modal-backdrop upload-dialog-backdrop">
