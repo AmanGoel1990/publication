@@ -51,8 +51,8 @@
                   <strong>Choose a format</strong>
                 </div>
                 <div class="format-options" aria-label="Book formats">
-                  <button type="button" class="format-option hardcopy-option" (click)="addToCart({ title: book.title, price: book.hardcopyPrice, format: 'Hardcopy' })">
-                    Hardcopy · {{ book.hardcopyPrice }} · Add to cart
+                  <button type="button" class="format-option hardcopy-option" [disabled]="book.stock < 1" (click)="addToCart({ bookId: book.id, title: book.title, price: book.hardcopyPrice, format: 'Hardcopy', stock: book.stock })">
+                    Hardcopy · {{ book.hardcopyPrice }} · {{ book.stock > 0 ? 'Add to cart' : 'Out of stock' }}
                   </button>
                   @if (book.pdf) {
                     <button type="button" class="format-option ebook-option" (click)="addToCart({ title: book.title, price: book.ebookPrice, format: 'E-book' })">

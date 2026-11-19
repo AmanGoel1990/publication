@@ -54,6 +54,7 @@
                     type="button"
                     class="qty-btn qty-plus"
                     (click)="incrementQuantity(item.title, item.format)"
+                    [disabled]="item.format === 'Hardcopy' && item.stock !== undefined && item.quantity >= item.stock"
                     aria-label="Increase quantity"
                   >
                     <span>+</span>
@@ -104,6 +105,9 @@
           </div>
 
           <form class="billing-form" (ngSubmit)="placeOrder()">
+            @if (orderError) {
+              <p class="order-error" role="alert">{{ orderError }}</p>
+            }
             <div class="form-row two-col">
               <label>
                 <span>Full name</span>
@@ -144,7 +148,9 @@
 
             <div class="billing-actions">
               <button type="button" class="secondary-btn" (click)="showBilling = false">Back</button>
-              <button type="submit" class="primary-btn">Place order</button>
+              <button type="submit" class="primary-btn" [disabled]="isPlacingOrder">
+                {{ isPlacingOrder ? 'Placing order...' : 'Place order' }}
+              </button>
             </div>
           </form>
         </section>

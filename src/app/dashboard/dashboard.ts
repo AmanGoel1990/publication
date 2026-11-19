@@ -12,6 +12,7 @@ type DashboardBook = {
   author: string;
   hardcopyprice: string;
   ebookprice: string;
+  stock: number;
   image: string;
   pdf: string;
   description: string;
@@ -50,6 +51,7 @@ export class Dashboard implements OnInit {
     author: '',
     hardcopyprice: '',
     ebookprice: '',
+    stock: 0,
     image: '',
     pdf: '',
     description: '',
@@ -176,6 +178,7 @@ export class Dashboard implements OnInit {
       author: this.form.author.trim(),
       hardcopyprice: hardcopyprice,
       ebookprice: ebookprice,
+      stock: Math.max(0, Math.floor(Number(this.form.stock) || 0)),
       image: this.form.image.trim() || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
       pdf: this.form.pdf,
       description: description || 'No description provided yet.',
@@ -283,6 +286,7 @@ export class Dashboard implements OnInit {
     price?: string | number;
     hardcopyprice?: string | number;
     ebookprice?: string | number;
+    stock?: string | number;
     image?: string;
     pdf?: string;
     description?: string;
@@ -295,6 +299,7 @@ export class Dashboard implements OnInit {
       author: book.author ?? '',
       hardcopyprice: String(book.hardcopyprice ?? book.price ?? ''),
       ebookprice: String(book.ebookprice ?? ''),
+      stock: Math.max(0, Math.floor(Number(book.stock ?? 0) || 0)),
       image: book.image || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
       pdf: book.pdf ?? '',
       description: book.description ?? 'No description provided yet.',
@@ -315,6 +320,7 @@ export class Dashboard implements OnInit {
       author: '',
       hardcopyprice: '',
       ebookprice: '',
+      stock: 0,
       image: '',
       pdf: '',
       description: '',

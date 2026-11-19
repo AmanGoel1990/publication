@@ -10,6 +10,7 @@ type PublicationBook = {
   type: 'new' | 'old';
   hardcopyPrice: string;
   ebookPrice: string;
+  stock: number;
   image: string;
   pdf: string;
   description: string;
@@ -45,7 +46,13 @@ export class Publication implements OnInit {
     private cartService: CartService,
   ) {}
 
-  addToCart(product: { title: string; price: string; format: 'Hardcopy' | 'E-book' }): void {
+  addToCart(product: {
+    bookId?: number | string;
+    title: string;
+    price: string;
+    format: 'Hardcopy' | 'E-book';
+    stock?: number;
+  }): void {
     this.cartService.addToCart(product);
   }
 
@@ -77,6 +84,7 @@ export class Publication implements OnInit {
     type?: 'new' | 'old';
     hardcopyprice?: string | number;
     ebookprice?: string | number;
+    stock?: string | number;
     price?: string | number;
     image?: string;
     pdf?: string;
@@ -90,6 +98,7 @@ export class Publication implements OnInit {
       type: book.type === 'old' ? 'old' : 'new',
       hardcopyPrice: `₹${book.hardcopyprice ?? book.price ?? 0}`,
       ebookPrice: `₹${book.ebookprice ?? 0}`,
+      stock: Math.max(0, Math.floor(Number(book.stock ?? 0) || 0)),
       image: book.image ?? 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
       pdf: book.pdf ?? '',
       description: book.description ?? 'No description provided yet.',

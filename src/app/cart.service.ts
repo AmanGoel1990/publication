@@ -1,10 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 
 export type CartItem = {
+  bookId?: number | string;
   title: string;
   price: string;
   format: 'Hardcopy' | 'E-book';
   quantity: number;
+  stock?: number;
 };
 
 const CART_STORAGE_KEY = 'mdniy-cart-items';
@@ -23,30 +25,66 @@ export class CartService {
     this.setItems(items);
   }
 
-  addToCart(item: { title: string; price: string; format?: 'Hardcopy' | 'E-book' }): void {
+  addToCart(item: {
+    bookId?: number | string;
+    title: string;
+    price: string;
+    format?: 'Hardcopy' | 'E-book';
+    stock?: number;
+  }): boolean {
     const format = item.format ?? 'Hardcopy';
+    let added = true;
     this.updateItems((items) => {
       const existingItem = items.find(
         (cartItem) => cartItem.title === item.title && cartItem.format === format,
       );
 
       if (existingItem) {
+        if (format === 'Hardcopy' && item.stock !== undefined && existingItem.quantity >= item.stock) {
+          added = false;
+          return items;
+        }
+
         return items.map((cartItem) =>
           cartItem === existingItem
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            ? {
+                ...cartItem,
+                bookId: item.bookId ?? cartItem.bookId,
+                stock: item.stock ?? cartItem.stock,
+                quantity: cartItem.quantity + 1,
+              }
             : cartItem,
         );
       }
 
-      return [...items, { title: item.title, price: item.price, format, quantity: 1 }];
+      if (format === 'Hardcopy' && item.stock !== undefined && item.stock < 1) {
+        added = false;
+        return items;
+      }
+
+      return [...items, {
+        bookId: item.bookId,
+        title: item.title,
+        price: item.price,
+        format,
+        quantity: 1,
+        stock: item.stock,
+      }];
     });
+    return added;
   }
 
   updateQuantity(title: string, format: 'Hardcopy' | 'E-book', quantity: number): void {
     this.updateItems((items) =>
       items.map((item) =>
         item.title === title && item.format === format
-          ? { ...item, quantity: Math.max(1, quantity) }
+          ? {
+              ...item,
+              quantity: Math.min(
+                item.stock === undefined ? Number.POSITIVE_INFINITY : Math.max(1, item.stock),
+                Math.max(1, Math.floor(quantity)),
+              ),
+            }
           : item,
       ),
     );
@@ -84,7 +122,12 @@ export class CartService {
             typeof item?.price === 'string' &&
             (item?.format === 'Hardcopy' || item?.format === 'E-book') &&
             Number.isInteger(item?.quantity) &&
-            item.quantity > 0,
+            item.quantity > 0 &&
+            (item?.bookId === undefined ||
+              typeof item.bookId === 'string' ||
+              typeof item.bookId === 'number') &&
+            (item?.stock === undefined ||
+              (Number.isInteger(item.stock) && item.stock >= 0)),
         )
       ) {
         return storedItems;

@@ -133,6 +133,7 @@ describe('Integration', () => {
       price: 599.99,
       hardcopyprice: 599.99,
       ebookprice: 249.5,
+      stock: 0,
       pdfFileName: 'java-programming.pdf',
     });
     req.flush({
@@ -143,6 +144,7 @@ describe('Integration', () => {
       price: 599.99,
       hardcopyprice: 599.99,
       ebookprice: 249.5,
+      stock: 0,
       pdfFileName: 'java-programming.pdf',
     });
   });
@@ -169,6 +171,42 @@ describe('Integration', () => {
       id: 12,
       title: 'Java Programming',
       pdf: '/books/java-programming.pdf',
+    });
+
+    it('deducts hardcopy stock only when enough inventory is available', () => {
+      let updatedBooks: unknown;
+
+      service.purchaseHardcopies([{ id: 12, title: 'Java Programming', quantity: 2 }]).subscribe((books) => {
+        updatedBooks = books;
+      });
+
+      httpMock.expectOne('http://localhost:8080/api/books').flush([
+        { id: 12, title: 'Java Programming', hardcopyprice: 599.99, ebookprice: 249.5, stock: 5 },
+      ]);
+
+      const req = httpMock.expectOne('http://localhost:8080/api/books/12');
+      expect(req.request.method).toBe('PUT');
+      expect(req.request.body.stock).toBe(3);
+      req.flush({ id: 12, stock: 3 });
+
+      expect(updatedBooks).toEqual([
+        jasmine.objectContaining({ id: 12, stock: 3 }),
+      ]);
+    });
+
+    it('does not update a book when hardcopy stock is insufficient', () => {
+      let purchaseError: Error | undefined;
+
+      service.purchaseHardcopies([{ id: 12, title: 'Java Programming', quantity: 2 }]).subscribe({
+        error: (error: Error) => (purchaseError = error),
+      });
+
+      httpMock.expectOne('http://localhost:8080/api/books').flush([
+        { id: 12, title: 'Java Programming', stock: 1 },
+      ]);
+
+      expect(purchaseError?.message).toContain('Not enough hardcopy stock');
+      httpMock.expectNone('http://localhost:8080/api/books/12');
     });
   });
 });

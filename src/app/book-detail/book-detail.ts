@@ -9,6 +9,7 @@ type Book = {
   title: string;
   hardcopyPrice: string;
   ebookPrice: string;
+  stock: number;
   image: string;
   pdf: string;
   description: string;
@@ -59,11 +60,13 @@ export class BookDetail implements OnInit {
           return;
         }
 
+        
         this.book = {
           id: selectedBook.id,
           title: selectedBook.title ?? 'Untitled Book',
           hardcopyPrice: `₹${selectedBook.hardcopyprice}`,
           ebookPrice: `₹${selectedBook.ebookprice}`,
+          stock: Number(selectedBook.stock ?? 0),
           image:
             selectedBook.image ??
             'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
@@ -101,6 +104,8 @@ export class BookDetail implements OnInit {
       title: book.title,
       price: price,
       format: format,
+      bookId: book.id,
+      stock: format === 'Hardcopy' ? book.stock : undefined,
     });
   }
 }

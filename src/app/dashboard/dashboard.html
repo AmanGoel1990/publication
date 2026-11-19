@@ -109,6 +109,10 @@
                   <input type="number" min="0" step="0.01" [(ngModel)]="form.hardcopyprice" name="hardcopyprice" placeholder="500" required />
                 </label>
                 <label>
+                  <span>Hardcopy Stock</span>
+                  <input type="number" min="0" step="1" [(ngModel)]="form.stock" name="stock" placeholder="0" required />
+                </label>
+                <label>
                   <span>E-book Price</span>
                   <input type="number" min="0" step="0.01" [(ngModel)]="form.ebookprice" name="ebookprice" placeholder="250" required />
                 </label>
@@ -173,6 +177,7 @@
                     <th scope="col">Title</th>
                     <th scope="col">Author</th>
                     <th scope="col">Hardcopy</th>
+                    <th scope="col">Stock</th>
                     <th scope="col">E-book</th>
                     <th scope="col">Type</th>
                     <th scope="col">Actions</th>
@@ -184,6 +189,7 @@
                       <td class="book-title-cell">{{ book.title }}</td>
                       <td>{{ book.author || '—' }}</td>
                       <td>₹{{ book.hardcopyprice }}</td>
+                      <td>{{ book.stock }}</td>
                       <td>₹{{ book.ebookprice }}</td>
                       <td><span class="table-book-type">{{ book.type === 'new' ? 'New' : 'Old' }}</span></td>
                       <td>

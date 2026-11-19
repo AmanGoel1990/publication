@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { LoginResponse } from '../models/login-response';
 import { LoginRequest } from '../models/login-request';
-import { Observable, map, shareReplay, tap } from 'rxjs';
+import { Observable, forkJoin, map, of, shareReplay, switchMap, tap } from 'rxjs';
 
 const LOGIN_API_URL = 'http://localhost:8080/api/login';
 const REGISTER_API_URL = 'http://localhost:8080/api/register';
@@ -19,6 +19,7 @@ type ApiBook = {
   ebookprice?: string | number;
   hardcopyPrice?: string | number;
   ebookPrice?: string | number;
+  stock?: string | number;
   image?: string;
   pdf?: string;
   pdfFileName?: string;
@@ -87,6 +88,45 @@ export class Integration {
     }
 
     return this.booksCache$;
+  }
+
+  purchaseHardcopies(
+    purchases: Array<{ id?: number | string; title: string; quantity: number }>,
+  ): Observable<ApiBook[]> {
+    this.booksCache$ = null;
+    return this.getBooks().pipe(
+      switchMap((books) => {
+        const updates = purchases.map(({ id, title, quantity }) => {
+          const matches = books.filter((candidate) =>
+            id !== undefined
+              ? String(candidate.id) === String(id)
+              : candidate.title === title,
+          );
+          const book = matches.length === 1 ? matches[0] : undefined;
+          const stock = Number(book?.stock ?? 0);
+
+          if (!Number.isInteger(quantity) || quantity < 1) {
+            throw new Error('Hardcopy order quantities must be positive whole numbers.');
+          }
+
+          if (matches.length > 1) {
+            throw new Error(`The book "${title}" cannot be identified uniquely to update its stock.`);
+          }
+
+          if (!book || !Number.isInteger(stock) || stock < quantity) {
+            throw new Error(`Not enough hardcopy stock is available for ${title}.`);
+          }
+
+          if (book.id === undefined || book.id === null) {
+            throw new Error(`The book ${book.title} has no ID and its stock cannot be updated.`);
+          }
+
+          return this.updateBook(book.id, { ...book, stock: stock - quantity });
+        });
+
+        return updates.length ? forkJoin(updates) : of([]);
+      }),
+    );
   }
 
   getUsers(): Observable<ApiUser[]> {
@@ -176,6 +216,7 @@ export class Integration {
       price: book.price ?? '',
       hardcopyprice: book.hardcopyprice ?? book.hardcopyPrice ?? book.price ?? '',
       ebookprice: book.ebookprice ?? book.ebookPrice ?? '',
+      stock: Math.max(0, Math.floor(Number(book.stock ?? 0) || 0)),
       image:
         book.image || 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
       pdf: book.pdf ?? (book.pdfFileName ? `/books/${book.pdfFileName}` : ''),
@@ -195,6 +236,7 @@ export class Integration {
     price: number;
     hardcopyprice: number;
     ebookprice: number;
+    stock: number;
     pdfFileName: string;
   } {
     const hardcopyPrice = Number(book.hardcopyprice ?? book.hardcopyPrice ?? book.price ?? 0);
@@ -207,6 +249,7 @@ export class Integration {
       price: hardcopyPrice,
       hardcopyprice: hardcopyPrice,
       ebookprice: Number(book.ebookprice ?? book.ebookPrice ?? 0),
+      stock: Math.max(0, Math.floor(Number(book.stock ?? 0) || 0)),
       pdfFileName: book.pdfFileName ?? this.getPdfFileName(book.pdf),
     };
   }

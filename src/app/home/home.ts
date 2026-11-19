@@ -9,6 +9,7 @@ type Book = {
   title: string;
   hardcopyPrice: string;
   ebookPrice: string;
+  stock: number;
   image: string;
   pdf: string;
   description: string;
@@ -66,6 +67,7 @@ export class Home {
           title: book.title ?? 'Untitled Book',
           hardcopyPrice: `₹${book.hardcopyprice}`,
           ebookPrice: `₹${book.ebookprice}`,
+          stock: Number(book.stock ?? 0),
           image: book.image ?? 'https://placehold.co/600x400/eeeeee/222222?text=Book+Cover',
           pdf: book.pdf ?? '',
           description: book.description ?? 'No description provided yet.',
@@ -109,7 +111,13 @@ export class Home {
     console.log('BOOK CLICKED:', book);
     this.router.navigate(['/book', book.id]);
   }
-  addToCart(product: { title: string; price: string; format: 'Hardcopy' | 'E-book' }): void {
+  addToCart(product: {
+    bookId?: number | string;
+    title: string;
+    price: string;
+    format: 'Hardcopy' | 'E-book';
+    stock?: number;
+  }): void {
     this.cartService.addToCart(product);
   }
 

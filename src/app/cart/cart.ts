@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Integration } from '../services/integration';
 import { CartService } from '../cart.service';
 
 type CartFormat = 'Hardcopy' | 'E-book';
@@ -15,6 +16,8 @@ type CartFormat = 'Hardcopy' | 'E-book';
 })
 export class Cart {
   showBilling = false;
+  isPlacingOrder = false;
+  orderError = '';
 
   billingForm = {
     fullName: '',
@@ -27,6 +30,7 @@ export class Cart {
 
   constructor(
     public cartService: CartService,
+    private integration: Integration,
     private router: Router,
   ) {}
 
@@ -130,16 +134,42 @@ export class Cart {
     const { fullName, email, phone, address, city, pincode } = this.billingForm;
     const hasRequiredFields = fullName && email && phone && address && city && pincode;
 
-    if (!hasRequiredFields) {
+    if (!hasRequiredFields || this.isPlacingOrder) {
       return;
     }
 
-    this.cartService.items = [];
-    this.showBilling = false;
-    this.router.navigate(['/']);
+    this.orderError = '';
+    const hardcopies = this.cartItems
+      .filter((item) => item.format === 'Hardcopy')
+      .map((item) => ({
+        id: item.bookId,
+        title: item.title,
+        quantity: item.quantity,
+      }));
+
+    if (!hardcopies.length) {
+      this.finishOrder();
+      return;
+    }
+
+    this.isPlacingOrder = true;
+    this.integration.purchaseHardcopies(hardcopies).subscribe({
+      next: () => this.finishOrder(),
+      error: (error: Error) => {
+        this.isPlacingOrder = false;
+        this.orderError = error.message || 'The order could not be completed. Please try again.';
+      },
+    });
   }
 
   continueShopping(): void {
+    this.router.navigate(['/']);
+  }
+
+  private finishOrder(): void {
+    this.cartService.items = [];
+    this.showBilling = false;
+    this.isPlacingOrder = false;
     this.router.navigate(['/']);
   }
 }

@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 
 import { Cart } from './cart';
 import { CartService } from '../cart.service';
+import { Integration } from '../services/integration';
 
 describe('Cart', () => {
   let component: Cart;
@@ -12,7 +14,11 @@ describe('Cart', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Cart],
-      providers: [CartService, provideRouter([])],
+      providers: [
+        CartService,
+        provideRouter([]),
+        { provide: Integration, useValue: { purchaseHardcopies: () => of([]) } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Cart);
@@ -64,5 +70,32 @@ describe('Cart', () => {
         quantity: 1,
       }),
     );
+  });
+
+  it('does not let the cart quantity exceed hardcopy stock', () => {
+    cartService.items = [{
+      bookId: 7,
+      title: 'Yoga',
+      price: '₹300',
+      format: 'Hardcopy',
+      quantity: 1,
+      stock: 2,
+    }];
+
+    expect(cartService.addToCart({
+      bookId: 7,
+      title: 'Yoga',
+      price: '₹300',
+      format: 'Hardcopy',
+      stock: 2,
+    })).toBe(true);
+    expect(cartService.addToCart({
+      bookId: 7,
+      title: 'Yoga',
+      price: '₹300',
+      format: 'Hardcopy',
+      stock: 2,
+    })).toBe(false);
+    expect(cartService.items[0].quantity).toBe(2);
   });
 });

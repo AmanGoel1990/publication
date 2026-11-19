@@ -232,9 +232,10 @@ The monograph presents a detailed account of the six Shatkarmas, exploring their
                   <button
                     type="button"
                     class="format-option hardcopy-option"
-                    (click)="addToCart({ title: book.title, price: book.hardcopyPrice, format: 'Hardcopy' })"
+                    [disabled]="book.stock < 1"
+                    (click)="addToCart({ bookId: book.id, title: book.title, price: book.hardcopyPrice, format: 'Hardcopy', stock: book.stock })"
                   >
-                    Hardcopy · {{ book.hardcopyPrice }} · Add to cart
+                    Hardcopy · {{ book.hardcopyPrice }} · {{ book.stock > 0 ? 'Add to cart ' : 'Out of stock' }}
                   </button>
                   @if (book.pdf) {
                     <button

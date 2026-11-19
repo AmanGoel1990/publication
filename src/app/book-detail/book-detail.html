@@ -56,10 +56,11 @@
             <button
               type="button"
               class="format-option hardcopy-option"
+              [disabled]="book.stock < 1"
               (click)="addToCart(book, 'Hardcopy')"
             >
               <span>Hardcopy</span>
-              <span>{{ book.hardcopyPrice }}</span>
+              <span>{{ book.hardcopyPrice }} · {{ book.stock > 0 ? book.stock + ' in stock' : 'out of stock' }}</span>
             </button>
 
             @if (book.pdf) {
