@@ -13,6 +13,7 @@ import { CartService } from '../cart.service';
 })
 export class Menu {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly sessionKey = 'mdniy-auth-session';
 
   // readonly navItems = ['Home', 'Publications', 'Special Offers', 'About MDNIY', 'Contact'];
   // readonly navItems = ['Home', 'Publications', 'About', 'Contact'];
@@ -28,7 +29,29 @@ export class Menu {
   ) {}
 
   get isLoggedIn(): boolean {
-    return typeof localStorage !== 'undefined' && !!localStorage.getItem('mdniy-auth-session');
+    return ['user', 'customer'].includes(this.currentSessionRole);
+  }
+
+  private get currentSessionRole(): string {
+    if (typeof localStorage === 'undefined') {
+      return '';
+    }
+
+    try {
+      const session = localStorage.getItem(this.sessionKey);
+      if (!session) {
+        return '';
+      }
+
+      const parsedSession = JSON.parse(session);
+      const role = parsedSession.role ?? parsedSession.userType ?? parsedSession.usertype ??
+        parsedSession.userRole ?? parsedSession.roleName ?? '';
+      return typeof role === 'string'
+        ? role.trim().toLowerCase().replace(/^role[_\s-]?/, '')
+        : '';
+    } catch {
+      return '';
+    }
   }
 
   get currentUser(): string {
@@ -37,7 +60,7 @@ export class Menu {
     }
 
     try {
-      const session = localStorage.getItem('mdniy-auth-session');
+      const session = localStorage.getItem(this.sessionKey);
       return session ? JSON.parse(session).username ?? 'User' : 'User';
     } catch {
       return 'User';
@@ -117,7 +140,9 @@ export class Menu {
   }
 
   toggleUserMenu(): void {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
+    if (this.isLoggedIn) {
+      this.isUserMenuOpen = !this.isUserMenuOpen;
+    }
   }
 
   toggleMenu(): void {
@@ -162,7 +187,7 @@ export class Menu {
   logout(): void {
     this.isUserMenuOpen = false;
     if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem('mdniy-auth-session');
+      localStorage.removeItem(this.sessionKey);
     }
     this.router.navigate(['/']);
   }

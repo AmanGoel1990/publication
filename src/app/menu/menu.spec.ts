@@ -75,10 +75,11 @@ describe('Menu', () => {
   it('should show logout only after opening the logged-in user menu', () => {
     localStorage.setItem(
       'mdniy-auth-session',
-      JSON.stringify({ username: 'Asha', role: 'user' }),
+      JSON.stringify({ username: 'Asha', userType: 'user' }),
     );
     fixture.detectChanges();
 
+    expect(component.isLoggedIn).toBeTrue();
     expect(fixture.nativeElement.textContent).toContain('Asha');
     expect(fixture.nativeElement.textContent).not.toContain('Logout');
 
@@ -89,6 +90,23 @@ describe('Menu', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Logout');
+  });
+
+  it('should not open the user menu for an administrator session', () => {
+    localStorage.setItem(
+      'mdniy-auth-session',
+      JSON.stringify({ username: 'admin', userType: 'admin' }),
+    );
+    fixture.detectChanges();
+
+    component.toggleUserMenu();
+    fixture.detectChanges();
+
+    expect(component.isLoggedIn).toBeFalse();
+    expect(component.isUserMenuOpen).toBeFalse();
+    expect(fixture.nativeElement.querySelector('.user-name-btn')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.user-dropdown')).toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain('admin');
   });
 
   it('should keep the cart popup open when clicking inside it', () => {
